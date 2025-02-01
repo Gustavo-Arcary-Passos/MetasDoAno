@@ -1,0 +1,24 @@
+# Ignorar node_modules, pois não é necessário versionar dependências
+node_modules/
+
+# Ignorar arquivos de lock (dependendo do seu gerenciador de pacotes)
+package-lock.json
+yarn.lock
+
+# Ignorar a pasta windows (gerada para Windows)
+windows/
+
+# Ignorar arquivos de configuração do metro bundler
+metro.config.js
+
+# Outros arquivos temporários ou específicos de desenvolvimento podem ser ignorados também
+*.log
+*.tmp
+
+# Ignorar arquivos de IDEs ou editores (ex: VS Code, JetBrains)
+.vscode/
+.idea/
+
+# Ignorar arquivos de sistemas operacionais
+.DS_Store    # Para macOS
+Thumbs.db    # Para Windows
