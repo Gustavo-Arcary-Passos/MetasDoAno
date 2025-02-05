@@ -12,7 +12,7 @@ function createWindow () {
     }
   })
 
-  mainWindow.loadFile('src/index.html')
+  mainWindow.loadFile('src/square.html')
 
   mainWindow.removeMenu();
 

@@ -15,6 +15,10 @@ class Rotina {
             <p><strong>Descrição:</strong> ${this.description}</p>
             <p><strong>Frequência:</strong> ${this.frequency}</p>
         `;
+        
+        div.addEventListener("click", () => {
+            window.location.href = `detalhes.html?nome=${encodeURIComponent(this.nome)}&descricao=${encodeURIComponent(this.description)}&frequencia=${encodeURIComponent(this.frequency)}`;
+        });
 
         return div;
     }

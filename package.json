@@ -10,5 +10,8 @@
   },
   "scripts": {
     "start": "electron ."
+  },
+  "dependencies": {
+    "date-fns": "^4.1.0"
   }
 }

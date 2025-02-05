@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Rotina</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="rotinaNome"></h1>
+        <p><strong>Descrição:</strong> <span id="rotinaDescricao"></span></p>
+        <p><strong>Frequência:</strong> <span id="rotinaFrequencia"></span></p>
+        <a href="rotina.html">Voltar</a>
+    </div>
+
+    <script>
+        function getParametro(nome) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(nome);
+        }
+
+        document.getElementById("rotinaNome").innerText = getParametro("nome");
+        document.getElementById("rotinaDescricao").innerText = getParametro("descricao");
+        document.getElementById("rotinaFrequencia").innerText = getParametro("frequencia");
+    </script>
+</body>
+</html>
