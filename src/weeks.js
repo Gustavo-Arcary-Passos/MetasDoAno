@@ -1,4 +1,4 @@
-import { startOfWeek, endOfYear, differenceInCalendarWeeks } from "date-fns";
+const { startOfWeek, endOfYear, differenceInCalendarWeeks } = require('date-fns');
 
 function countWeeksInYear(year) {
     const start = startOfWeek(new Date(year, 0, 1), { weekStartsOn: 6 }); // Sábado
@@ -6,5 +6,4 @@ function countWeeksInYear(year) {
     return differenceInCalendarWeeks(end, start, { weekStartsOn: 6 }) + 1;
 }
 
-const weeks = countWeeksInYear(2025);
-console.log(`Número de semanas em 2025: ${weeks}`);
+module.exports = { countWeeksInYear };
