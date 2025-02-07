@@ -1,14 +1,3 @@
-// const { startOfWeek, endOfYear, differenceInCalendarWeeks } = require('date-fns')
-
-// function countWeeksInYear(year) {
-//     const start = startOfWeek(new Date(year, 0, 1), { weekStartsOn: 6 }); // Sábado
-//     const end = endOfYear(new Date(year, 11, 31));
-//     return differenceInCalendarWeeks(end, start, { weekStartsOn: 6 }) + 1;
-// }
-
-// const weeks = countWeeksInYear(2025);
-// console.log(`Número de semanas em 2025: ${weeks}`);
-
 class SquareModel {
     constructor(className, size, borderRadius, margin) {
         this.className = className;
@@ -62,48 +51,83 @@ class SquareColor {
             }
         `;
     }
+
+    // Função para alternar a cor ao clicar
+    addClickListener(squareElement, colorActive) {
+        squareElement.addEventListener('click', () => {
+            const currentColor = squareElement.style.backgroundColor;
+            // Alterna entre a cor ativa e a cor original
+            if (currentColor === colorActive) {
+                squareElement.style.backgroundColor = this.color;  // Cor original
+            } else {
+                squareElement.style.backgroundColor = colorActive; // Cor ativa
+            }
+        });
+    }
 }
 
 class SquareGenerator {
-    generateSquare(container, squareClasses) {
+    generateSquare(container, squareClasses, squareColor, colorActive) {
         const square = document.createElement("div");
         square.className = squareClasses.join(" ");
+
+        // Adiciona o listener de clique para trocar de cor
+        squareColor.addClickListener(square, colorActive);
+
         container.appendChild(square);
     }
 }
 
-// Chamando a função exposta no preload.js
-window.api.countWeeksInYear(2025).then((weeks) => {
-    console.log(`Número de semanas em 2025: ${weeks}`);
-  
-    // Agora você pode usar o valor de 'weeks' para gerar a grid de quadrados
-    const squareInstance = new SquareGenerator();
-    const squareStyle = new SquareModel("quadrado-estilo", 24, 5, 0);
-    const squareColor = new SquareColor("quadrado-color", "rgb(62,165,175)", "1px solid rgb(0,0,0)");
-  
-    // Adicionando os estilos
-    squareStyle.addStyle();
-    squareColor.addStyle();
-  
-    // Contêiner para os quadrados
-    const container = document.createElement("div");
-    container.className = "calendar-container";
-    document.body.appendChild(container);
-  
-    // Estilo para o contêiner de calendário
-    let style = document.getElementById("dynamic-styles");
-    style.innerHTML += `
-        .calendar-container {
-            display: grid;
-            grid-template-columns: repeat(${weeks}, 1fr); /* Usando o número de semanas para definir as colunas */
-            gap: 2px; /* Espaçamento entre quadrados */
-            justify-content: left;
-            margin: 20px;
+function generateCalendar(year, squareSize, borderSize, colorDefault, colorActive) {
+    Promise.all([
+        window.api.countWeeksInYear(year),
+        window.api.countDaysInYear(year),
+        window.api.firstDayYear(year),
+        window.api.lastDayYear(year),
+    ]).then(([weeks, daysInYear, start, end]) => {
+        console.log(`Número de semanas em ${year}: ${weeks}`);
+        console.log(`Número de dias em ${year}: ${daysInYear}`);
+
+        const squareInstance = new SquareGenerator();
+        const squareStyle = new SquareModel("quadrado-estilo", squareSize, borderSize, 0);
+        const squareColor = new SquareColor("quadrado-color", colorDefault, "1px solid rgb(0,0,0)");
+        const squareTransparency = new SquareColor("quadrado-transparency", "rgba(0,0,0,0)", "1px solid rgba(0,0,0,0)");
+
+        squareStyle.addStyle();
+        squareColor.addStyle();
+
+        const container = document.createElement("div");
+        container.className = "calendar-container";
+        document.body.appendChild(container);
+
+        let style = document.getElementById("dynamic-styles");
+        style.innerHTML += `
+            .calendar-container {
+                display: grid;
+                grid-template-columns: repeat(${weeks}, 1fr); /* Define as colunas com base no número de semanas */
+                gap: 2px;
+                justify-content: left;
+                margin: 20px;
+            }
+        `;
+
+        let blank = 0;
+        for (let i = 0; i < daysInYear + blank; i++) {
+            let dayWeek = Math.floor(i / weeks);
+            let week = i % weeks;
+            if (week == 0 && dayWeek < start) {
+                squareInstance.generateSquare(container, ["quadrado-estilo", "quadrado-transparency"], squareColor, colorActive);
+                blank += 1;
+            } else if (week == (weeks - 1) && dayWeek > end) {
+                squareInstance.generateSquare(container, ["quadrado-estilo", "quadrado-transparency"], squareColor, colorActive);
+                blank += 1;
+            } else {
+                squareInstance.generateSquare(container, ["quadrado-estilo", "quadrado-color"], squareColor, colorActive);
+            }
         }
-    `;
-  
-    // Gerando os quadrados com base nas semanas
-    for (let i = 0; i < 365; i++) {
-      squareInstance.generateSquare(container, ["quadrado-estilo", "quadrado-color"]);
-    }
-  });  
+    }).catch(error => {
+        console.error("Erro ao gerar o calendário:", error);
+    });
+}
+
+generateCalendar(2025, 24, 5, "rgb(31,92,97)", "rgb(62,185,195)");
