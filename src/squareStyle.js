@@ -71,7 +71,6 @@ class SquareGenerator {
         const square = document.createElement("div");
         square.className = squareClasses.join(" ");
 
-        // Adiciona o listener de clique para trocar de cor
         squareColor.addClickListener(square, colorActive);
 
         container.appendChild(square);
@@ -96,15 +95,17 @@ function generateCalendar(year, squareSize, borderSize, colorDefault, colorActiv
         squareStyle.addStyle();
         squareColor.addStyle();
 
-        const container = document.createElement("div");
-        container.className = "calendar-container";
-        document.body.appendChild(container);
+        // Pegue o container #calendar já existente
+        const container = document.getElementById("calendar");
+        const calendarContainer = document.createElement("div");
+        calendarContainer.className = "calendar-container";
+        container.appendChild(calendarContainer); // Adiciona o calendar-container dentro do #calendar
 
         let style = document.getElementById("dynamic-styles");
         style.innerHTML += `
             .calendar-container {
                 display: grid;
-                grid-template-columns: repeat(${weeks}, 1fr); /* Define as colunas com base no número de semanas */
+                grid-template-columns: repeat(${weeks}, 1fr);
                 gap: 2px;
                 justify-content: left;
                 margin: 20px;
@@ -116,18 +117,16 @@ function generateCalendar(year, squareSize, borderSize, colorDefault, colorActiv
             let dayWeek = Math.floor(i / weeks);
             let week = i % weeks;
             if (week == 0 && dayWeek < start) {
-                squareInstance.generateSquare(container, ["quadrado-estilo", "quadrado-transparency"], squareColor, colorActive);
+                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColor, colorActive);
                 blank += 1;
             } else if (week == (weeks - 1) && dayWeek > end) {
-                squareInstance.generateSquare(container, ["quadrado-estilo", "quadrado-transparency"], squareColor, colorActive);
+                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColor, colorActive);
                 blank += 1;
             } else {
-                squareInstance.generateSquare(container, ["quadrado-estilo", "quadrado-color"], squareColor, colorActive);
+                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-color"], squareColor, colorActive);
             }
         }
     }).catch(error => {
         console.error("Erro ao gerar o calendário:", error);
     });
 }
-
-generateCalendar(2025, 24, 5, "rgb(31,92,97)", "rgb(62,185,195)");

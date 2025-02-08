@@ -6,7 +6,7 @@ class Rotina {
         this.frequency = frequency;
     }
 
-    criarElemento() {
+    showRotinaCompleta() {
         let div = document.createElement("div");
         div.classList.add("rotina");
 
@@ -22,16 +22,30 @@ class Rotina {
 
         return div;
     }
+
+    showTarefaInfo() {
+        let div = document.createElement("div");
+        div.classList.add("rotina");
+    
+        let checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.classList.add("tarefa-checkbox");
+    
+        let label = document.createElement("label");
+        label.textContent = this.nome;
+        label.style.marginLeft = "10px";
+    
+        // checkbox.addEventListener("change", () => {
+        //     if (checkbox.checked) {
+        //         label.style.textDecoration = "line-through";
+        //     } else {
+        //         label.style.textDecoration = "none";
+        //     }
+        // });
+    
+        div.appendChild(checkbox);
+        div.appendChild(label);
+    
+        return div;
+    }
 }
-
-let rotinas = [
-    new Rotina("Academia", "Treino de musculação", "Diária"),
-    new Rotina("Estudos", "Ler um capítulo de um livro", "Semanal"),
-    new Rotina("Lazer", "Assistir um filme", "Mensal")
-];
-
-let listaRotinas = document.getElementById("listaRotinas");
-
-rotinas.forEach(rotina => {
-    listaRotinas.appendChild(rotina.criarElemento());
-});

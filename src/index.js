@@ -20,7 +20,7 @@ function createWindow() {
         },
     });
 
-    mainWindow.loadFile('src/square.html');
+    mainWindow.loadFile('src/index.html');
 
     mainWindow.removeMenu();
     mainWindow.on('closed', () => {

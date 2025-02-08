@@ -3,10 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Electron App</title>
+  <title>Meta do Ano</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .rotina {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello, Electron!</h1>
-  <a href="rotina.html">Ir para Página 2</a>
+  <h1>Tarefas</h1>
+  <div id="listaTarefas"></div>
+  <a href="rotina.html">Rotinas</a>
+
+  <script src="rotina.js"></script>
+  <script src="tarefas.js"></script>
+  
 </body>
 </html>

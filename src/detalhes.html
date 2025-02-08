@@ -9,32 +9,35 @@
             font-family: Arial, sans-serif;
         }
         .container {
-            max-width: 600px;
             margin: 20px auto;
             padding: 20px;
             border: 1px solid #ddd;
             border-radius: 5px;
             background-color: #f9f9f9;
         }
+        #rotinaNome {
+            text-align: center; /* Alinha o título ao centro */
+        }
+        #rotinaDescricao, #rotinaFrequencia {
+            text-align: left; /* Alinha a descrição e frequência à esquerda */
+        }
+        #calendar {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 id="rotinaNome"></h1>
-        <p><strong>Descrição:</strong> <span id="rotinaDescricao"></span></p>
-        <p><strong>Frequência:</strong> <span id="rotinaFrequencia"></span></p>
         <a href="rotina.html">Voltar</a>
+        <h1 id="rotinaNome">Nome da Rotina</h1>
+        <p><strong>Descrição:</strong> <span id="rotinaDescricao">Descrição da rotina</span></p>
+        <p><strong>Frequência:</strong> <span id="rotinaFrequencia">Frequência da rotina</span></p>
+        
+        <!-- Calendário -->
+        <div id="calendar"></div>
     </div>
 
-    <script>
-        function getParametro(nome) {
-            const params = new URLSearchParams(window.location.search);
-            return params.get(nome);
-        }
-
-        document.getElementById("rotinaNome").innerText = getParametro("nome");
-        document.getElementById("rotinaDescricao").innerText = getParametro("descricao");
-        document.getElementById("rotinaFrequencia").innerText = getParametro("frequencia");
-    </script>
+    <script src="detalhes.js"></script>
+    <script src="squareStyle.js"></script>
 </body>
 </html>
