@@ -8,13 +8,39 @@
         body {
             font-family: Arial, sans-serif;
         }
-        .rotina {
+        /* .rotina {
             border: 1px solid #ddd;
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
             background-color: #f9f9f9;
+        } */
+        .rotina {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Garante que o botão fique à direita */
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
         }
+
+        .rotina-content {
+            flex-grow: 1; /* Faz com que o conteúdo ocupe todo o espaço disponível */
+        }
+
+        .botao-detalhes {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .botao-detalhes:hover {
+            background-color: #0056b3;
+        }
+
     </style>
 </head>
 <body>

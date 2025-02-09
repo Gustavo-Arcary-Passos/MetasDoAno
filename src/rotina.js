@@ -6,19 +6,29 @@ class Rotina {
         this.frequency = frequency;
     }
 
-    showRotinaCompleta() {
+    showRotinaCompleta(rotinas,listaRotinas) {
         let div = document.createElement("div");
         div.classList.add("rotina");
-
+        
         div.innerHTML = `
-            <h3>${this.nome}</h3>
-            <p><strong>Descrição:</strong> ${this.description}</p>
-            <p><strong>Frequência:</strong> ${this.frequency}</p>
+            <div class="rotina-content">
+                <h3>${this.nome}</h3>
+                <p><strong>Descrição:</strong> ${this.description}</p>
+                <p><strong>Frequência:</strong> ${this.frequency}</p>
+            </div>
+            <button class="botao-detalhes">Delete</button>
         `;
         
         div.addEventListener("click", () => {
             window.location.href = `detalhes.html?nome=${encodeURIComponent(this.nome)}&descricao=${encodeURIComponent(this.description)}&frequencia=${encodeURIComponent(this.frequency)}`;
         });
+
+        div.querySelector(".botao-detalhes").addEventListener("click", (event) => {
+            event.stopPropagation();
+            window.api.deleteRotina(this.nome); //await
+            document.getElementById("listaRotinas").innerHTML = "";
+            carregarRotinas(); // await
+        });    
 
         return div;
     }
@@ -34,14 +44,6 @@ class Rotina {
         let label = document.createElement("label");
         label.textContent = this.nome;
         label.style.marginLeft = "10px";
-    
-        // checkbox.addEventListener("change", () => {
-        //     if (checkbox.checked) {
-        //         label.style.textDecoration = "line-through";
-        //     } else {
-        //         label.style.textDecoration = "none";
-        //     }
-        // });
     
         div.appendChild(checkbox);
         div.appendChild(label);
