@@ -11,12 +11,12 @@ document.addEventListener("DOMContentLoaded", function () {
     
     if(typeFreq === "Diária")
     {
-        generateCalendar(2025, 24, 5, "rgb(31,92,97)", "rgb(62,185,195)");
+        generateCalendarDay(2025, 24, 5, "rgb(31,92,97)", "rgb(62,185,195)");
     } else if(typeFreq === "Semanal")
     {
-        generateCalendar(2025, 24, 5, "rgb(97,31,92)", "rgb(195,62,185)");
+        generateCalendarWeek(2025, 96, 20, "rgb(97,31,92)", "rgb(195,62,185)");
     } else if(typeFreq === "Mensal")
     {
-        generateCalendar(2025, 24, 5, "rgb(92,97,31)", "rgb(185,195,62)");
+        generateCalendarMonth(96, 20, "rgb(92,97,31)", "rgb(185,195,62)");
     }
 });
