@@ -26,13 +26,6 @@ class Day extends Data {
 
 class Week extends Data {
     countWeeksInMonth(year, month) {
-        // const firstDayOfMonth = new Date(year, month, 1);
-        // const lastDayOfMonth = new Date(year, month + 1, 0);
-
-        // const startWeek = startOfWeek(firstDayOfMonth, { weekStartsOn: 0 });
-        // const endWeek = endOfWeek(lastDayOfMonth, { weekStartsOn: 0 });
-
-        // return differenceInCalendarWeeks(endWeek, startWeek, { weekStartsOn: 0 }) + 1;
         const firstDayOfMonth = new Date(year, month, 1);
         const firstSunday = new Date(firstDayOfMonth);
         firstSunday.setDate(firstDayOfMonth.getDate() + (7 - firstDayOfMonth.getDay()) % 7);

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Rotinas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nova Rotina</h1>
+    
+    <div id="NovaRotina">
+        <form id="formRotina">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required><br><br>
+
+            <label for="descricao">Descrição:</label>
+            <textarea id="descricao" name="descricao" required></textarea><br><br>
+
+            <label for="frequencia">Frequência:</label>
+            <select id="frequencia" name="frequencia">
+                <option value="Diária">Diária</option>
+                <option value="Semanal">Semanal</option>
+                <option value="Mensal">Mensal</option>
+            </select><br><br>
+
+            <button type="submit">Adicionar Rotina</button>
+        </form>
+    </div>
+
+    <a href="rotina.html">Voltar</a>
+
+    <script src="addRotina.js"></script>
+</body>
+</html>

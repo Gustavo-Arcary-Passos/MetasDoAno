@@ -25,9 +25,9 @@ class Rotina {
 
         div.querySelector(".botao-detalhes").addEventListener("click", (event) => {
             event.stopPropagation();
-            window.api.deleteRotina(this.nome); //await
+            window.api.deleteRotina(this.nome);
             document.getElementById("listaRotinas").innerHTML = "";
-            carregarRotinas(); // await
+            carregarRotinas();
         });    
 
         return div;
