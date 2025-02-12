@@ -1,3 +1,5 @@
+const db = require('./database');
+
 class Rotina {
     constructor(nome, description, frequency) {
         this.nome = nome;
@@ -6,22 +8,31 @@ class Rotina {
     }
 }
 
-let rotinas = [
-    new Rotina("Academia", "Treino de musculação", "Diária"),
-    new Rotina("Estudos", "Ler um capítulo de um livro", "Semanal"),
-    new Rotina("Lazer", "Assistir um filme", "Mensal")
-];
-
 function getRotinas() {
-    return rotinas;
+    const stmt = db.prepare('SELECT * FROM rotinas');
+    return stmt.all(); 
 }
 
-function adicionarRotina(nome, descricao, frequencia) {
-    rotinas.push(new Rotina(nome, descricao, frequencia));
+function adicionarRotina(nome, description, frequency) {
+    try {
+        const stmt = db.prepare("INSERT INTO rotinas (nome, description, frequency) VALUES (?, ?, ?)");
+        stmt.run(nome, description, frequency);
+        return true;
+    } catch (err) {
+        console.error('Erro ao adicionar rotina:', err.message);
+        return false;
+    }
 }
 
 function removerRotina(nome) {
-    rotinas = rotinas.filter(rotina => rotina.nome !== nome);
+    try {
+        const stmt = db.prepare("DELETE FROM rotinas WHERE nome = ?");
+        stmt.run(nome);
+        return true;
+    } catch (err) {
+        console.error('Erro ao remover rotina:', err.message);
+        return false;
+    }
 }
 
 module.exports = { getRotinas, adicionarRotina, removerRotina };
