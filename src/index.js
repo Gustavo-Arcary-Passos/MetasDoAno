@@ -1,7 +1,7 @@
 const path = require('path');
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { day, week, month } = require('./data');
-const { getRotinas, adicionarRotina, removerRotina } = require('./rotinasGlobal');
+const { getRotinas, adicionarRotina, removerRotina, getRotinaDatas, adicionarRotinaData, removerRotinaData} = require('./rotinasGlobal');
 
 ipcMain.handle('count-weeks', (event, year) => day.countWeeksInYear(year));
 ipcMain.handle('count-days', (event, year) => day.countDaysInYear(year));
@@ -14,6 +14,10 @@ ipcMain.handle('months-in-year', (event) => month.countMonthsInYear());
 ipcMain.handle('get-rotinas', () => getRotinas());
 ipcMain.handle('add-rotina', (event, nome, descricao, frequencia) => adicionarRotina(nome, descricao, frequencia));
 ipcMain.handle('delete-rotina', (event, nome) => removerRotina(nome));
+ipcMain.handle('get-rotina-datas', (event, nome) => getRotinaDatas(nome));
+ipcMain.handle('add-rotina-data', (event, nome, data) => adicionarRotinaData(nome, data));
+ipcMain.handle('delete-rotina-data', (event, nome, data) => removerRotinaData(nome, data));
+
 
 let mainWindow;
 

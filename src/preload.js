@@ -11,4 +11,7 @@ contextBridge.exposeInMainWorld('api', {
   getRotinas: () => ipcRenderer.invoke('get-rotinas'),
   addRotina: (nome, descricao, frequencia) => ipcRenderer.invoke('add-rotina', nome, descricao, frequencia),
   deleteRotina: (nome) => ipcRenderer.invoke('delete-rotina', nome),
+  getRotinaDatas: (nome) => ipcRenderer.invoke('get-rotina-datas', nome),
+  adicionarRotinaData: (nome, data) => ipcRenderer.invoke('add-rotina-data', nome, data),
+  removerRotinaData: (nome, data) => ipcRenderer.invoke('delete-rotina-data', nome, data),
 });

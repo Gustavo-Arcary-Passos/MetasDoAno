@@ -11,4 +11,11 @@ db.exec(`CREATE TABLE IF NOT EXISTS rotinas (
     frequency TEXT
 )`);
 
+db.exec(`CREATE TABLE IF NOT EXISTS rotinas_historico (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT,
+    data TEXT,
+    FOREIGN KEY (nome) REFERENCES rotinas(nome) ON DELETE CASCADE
+)`);
+
 module.exports = db;
