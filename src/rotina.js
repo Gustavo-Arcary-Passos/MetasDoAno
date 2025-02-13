@@ -1,9 +1,10 @@
 
 class Rotina {
-    constructor(nome, description, frequency) {
+    constructor(nome, description, frequency, checked = false) {
         this.nome = nome;
         this.description = description;
         this.frequency = frequency;
+        this.checked = checked;
     }
 
     showRotinaCompleta(rotinas,listaRotinas) {
@@ -40,6 +41,7 @@ class Rotina {
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.classList.add("tarefa-checkbox");
+        checkbox.checked = this.checked;
     
         let label = document.createElement("label");
         label.textContent = this.nome;

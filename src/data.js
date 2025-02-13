@@ -1,7 +1,9 @@
-const { startOfWeek, endOfWeek, endOfYear, getDay, differenceInCalendarWeeks } = require('date-fns');
+const { startOfWeek, endOfWeek, endOfYear, getDay, differenceInCalendarWeeks, format } = require('date-fns');
 
 class Data {
-    
+    day() {
+        return format(new Date(),'yyyy-MM-dd');
+    }
 }
 
 class Day extends Data {
@@ -22,6 +24,10 @@ class Day extends Data {
     countDaysInYear(year) {
         return new Date(year, 1, 29).getDate() === 29 ? 366 : 365;
     }
+
+    today() {
+        return getDayOfYear(new Date());
+    }
 }
 
 class Week extends Data {
@@ -41,15 +47,24 @@ class Week extends Data {
     countWeeksInAllMonths(year) {
         return Array.from({ length: 12 }, (_, month) => this.countWeeksInMonth(year, month));
     }
+
+    currentWeek() {
+        return getISOWeek(new Date());
+    }
 }
 
 class Month extends Data {
     countMonthsInYear() {
         return 12;
     }
+
+    currentMonth() {
+        return new Date().getMonth() + 1;
+    }
 }
 
 module.exports = {
+    data: new Data(),
     day: new Day(),
     week: new Week(),
     month: new Month(),

@@ -5,8 +5,7 @@ const dbPath = path.join(__dirname, 'database.sqlite');
 const db = new Database(dbPath, { verbose: console.log });
 
 db.exec(`CREATE TABLE IF NOT EXISTS rotinas (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT,
+    nome TEXT PRIMARY KEY,  -- Tornando o nome a chave primária
     description TEXT,
     frequency TEXT
 )`);

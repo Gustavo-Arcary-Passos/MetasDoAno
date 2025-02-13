@@ -7,14 +7,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const typeFreq = getParametro("frequencia");
     const rotinaNome = getParametro("nome");
 
-    // Log para verificar o valor de rotinaNome
     console.log("Nome da rotina:", rotinaNome);
 
     document.getElementById("rotinaNome").innerText = rotinaNome || "Nome não encontrado";
     document.getElementById("rotinaDescricao").innerText = getParametro("descricao") || "Descrição não encontrada";
     document.getElementById("rotinaFrequencia").innerText = typeFreq || "Frequência não encontrada";
 
-    let data = window.api.getRotinaDatas(rotinaNome); // Passando o nome da rotina
+    let data = window.api.getRotinaDatas(rotinaNome);
 
     if (data && data.length > 0) {
         console.log("Datas das atividades realizadas:");
