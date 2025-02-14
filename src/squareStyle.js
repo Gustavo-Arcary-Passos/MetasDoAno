@@ -66,11 +66,14 @@ class SquareColor {
 }
 
 class SquareGenerator {
-    generateSquare(container, squareClasses, squareColor, colorActive) {
+    generateSquare(container, squareClasses, squareColor, colorActive, selected = false) {
         const square = document.createElement("div");
         square.className = squareClasses.join(" ");
 
         if(!squareClasses.includes("quadrado-transparency")) {
+            if(selected) {
+                square.style.backgroundColor = colorActive;
+            }
             squareColor.addClickListener(square, colorActive);
         }
 
@@ -78,7 +81,7 @@ class SquareGenerator {
     }
 }
 
-function generateCalendarDay(year, squareSize, borderSize, colorDefault, colorActive) {
+function generateCalendarDay(year, squareSize, borderSize, colorDefault, colorActive, shouldBeActive) {
     Promise.all([
         window.api.countWeeksInYear(year),
         window.api.countDaysInYear(year),
@@ -112,8 +115,9 @@ function generateCalendarDay(year, squareSize, borderSize, colorDefault, colorAc
                 margin: 20px;
             }
         `;
-
+        
         let blank = 0;
+        let pos;
         for (let i = 0; i < daysInYear + blank; i++) {
             let dayWeek = Math.floor(i / weeks);
             let week = i % weeks;
@@ -124,7 +128,8 @@ function generateCalendarDay(year, squareSize, borderSize, colorDefault, colorAc
                 squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColor, colorActive);
                 blank += 1;
             } else {
-                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-color"], squareColor, colorActive);
+                pos = week*7 + (dayWeek - start + 1);
+                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-color"], squareColor, colorActive, shouldBeActive.hasOwnProperty(pos));
             }
         }
     }).catch(error => {
@@ -132,7 +137,7 @@ function generateCalendarDay(year, squareSize, borderSize, colorDefault, colorAc
     });
 }
 
-function generateCalendarWeek(year, squareSize, borderSize, colorDefault, colorActive) {
+function generateCalendarWeek(year, squareSize, borderSize, colorDefault, colorActive, shouldBeActive) {
     Promise.all([
         window.api.countWeeksInYear(year),
         window.api.countWeeksInAllMonths(year),
@@ -182,7 +187,7 @@ function generateCalendarWeek(year, squareSize, borderSize, colorDefault, colorA
     });
 }
 
-function generateCalendarMonth(squareSize, borderSize, colorDefault, colorActive) {
+function generateCalendarMonth(squareSize, borderSize, colorDefault, colorActive, shouldBeActive) {
     window.api.countMonthsInYear().then((months) => {
         const squareInstance = new SquareGenerator();
         const squareStyle = new SquareModel("quadrado-estilo", squareSize, borderSize, 0);

@@ -3,7 +3,7 @@ function getParametro(nome) {
     return params.get(nome);
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
     const typeFreq = getParametro("frequencia");
     const rotinaNome = getParametro("nome");
 
@@ -13,22 +13,25 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("rotinaDescricao").innerText = getParametro("descricao") || "Descrição não encontrada";
     document.getElementById("rotinaFrequencia").innerText = typeFreq || "Frequência não encontrada";
 
-    let data = window.api.getRotinaDatas(rotinaNome);
+    let data = await window.api.getRotinaDatas(rotinaNome);
 
-    if (data && data.length > 0) {
-        console.log("Datas das atividades realizadas:");
-        data.forEach(entry => {
-            console.log(`Data: ${entry.data}`);
-        });
-    } else {
-        console.log("Nenhuma data encontrada.");
-    }
-
+    // if (data && data.length > 0) {
+    //     console.log("Datas das atividades realizadas:");
+    //     data.forEach(entry => {
+    //         console.log(`Data: ${entry.data}`);
+    //     });
+    // } else {
+    //     console.log("Nenhuma data encontrada.");
+    // }
+    
     if (typeFreq === "Diária") {
-        generateCalendarDay(2025, 24, 5, "rgb(31,92,97)", "rgb(62,185,195)");
+        let dayCheckedRotinas = await window.api.groupDatesBy(data, 'day');
+        generateCalendarDay(2025, 24, 5, "rgb(31,92,97)", "rgb(62,185,195)", dayCheckedRotinas);
     } else if (typeFreq === "Semanal") {
-        generateCalendarWeek(2025, 96, 20, "rgb(97,31,92)", "rgb(195,62,185)");
+        let weekCheckedRotinas = await window.api.groupDatesBy(data, 'week');
+        generateCalendarWeek(2025, 96, 20, "rgb(97,31,92)", "rgb(195,62,185)", weekCheckedRotinas);
     } else if (typeFreq === "Mensal") {
-        generateCalendarMonth(96, 20, "rgb(92,97,31)", "rgb(185,195,62)");
+        let monthCheckedRotinas = await window.api.groupDatesBy(data, 'month');
+        generateCalendarMonth(96, 20, "rgb(92,97,31)", "rgb(185,195,62)", monthCheckedRotinas);
     }
 });

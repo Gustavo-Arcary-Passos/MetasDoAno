@@ -43,8 +43,10 @@ function getRotinaHoje(data) {
 }
 
 function getRotinaDatas(nome) {
-    const stmt = db.prepare('SELECT * FROM rotinas_historico WHERE nome = ?');
-    return stmt.all(nome);
+    const stmt = db.prepare('SELECT data FROM rotinas_historico WHERE nome = ?');
+    const dayRotinaChecked = stmt.all(nome);
+    console.log("Rotina dias realizados:", dayRotinaChecked);
+    return dayRotinaChecked;
 }
 
 function adicionarRotinaData(nome, data) {

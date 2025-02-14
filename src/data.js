@@ -1,8 +1,12 @@
-const { startOfWeek, endOfWeek, endOfYear, getDay, differenceInCalendarWeeks, format } = require('date-fns');
+const { 
+    startOfWeek, startOfMonth, endOfWeek, endOfYear, 
+    getDay, getDayOfYear, differenceInCalendarWeeks, 
+    format, parseISO 
+} = require('date-fns');
 
 class Data {
     day() {
-        return format(new Date(),'yyyy-MM-dd');
+        return format(new Date(), 'yyyy-MM-dd');
     }
 }
 
@@ -17,7 +21,7 @@ class Day extends Data {
 
     countWeeksInYear(year) {
         const start = startOfWeek(new Date(year, 0, 1), { weekStartsOn: 0 });
-        const end = endOfYear(new Date(year, 11, 31));
+        const end = endOfYear(new Date(year, 0, 1)); // Correção
         return differenceInCalendarWeeks(end, start, { weekStartsOn: 0 }) + 1;
     }
 
@@ -25,20 +29,23 @@ class Day extends Data {
         return new Date(year, 1, 29).getDate() === 29 ? 366 : 365;
     }
 
-    today() {
-        return getDayOfYear(new Date());
+    today(data) {
+        try {
+            const date = parseISO(data);
+            return getDayOfYear(date);
+        } catch (error) {
+            console.error(`Erro ao processar data: ${data}`, error);
+            return null;
+        }
     }
 }
 
 class Week extends Data {
     countWeeksInMonth(year, month) {
         const firstDayOfMonth = new Date(year, month, 1);
-        const firstSunday = new Date(firstDayOfMonth);
-        firstSunday.setDate(firstDayOfMonth.getDate() + (7 - firstDayOfMonth.getDay()) % 7);
-        
         const lastDayOfMonth = new Date(year, month + 1, 0);
         
-        const startWeek = startOfWeek(firstSunday, { weekStartsOn: 0 });
+        const startWeek = startOfWeek(firstDayOfMonth, { weekStartsOn: 0 });
         const endWeek = endOfWeek(lastDayOfMonth, { weekStartsOn: 0 });
         
         return differenceInCalendarWeeks(endWeek, startWeek, { weekStartsOn: 0 }) + 1;
@@ -48,8 +55,18 @@ class Week extends Data {
         return Array.from({ length: 12 }, (_, month) => this.countWeeksInMonth(year, month));
     }
 
-    currentWeek() {
-        return getISOWeek(new Date());
+    currentWeek(data) {
+        try {
+            const date = parseISO(data);
+            const firstDayOfMonth = startOfMonth(date);
+            const firstWeekStart = startOfWeek(firstDayOfMonth, { weekStartsOn: 0 });
+            const currentWeekStart = startOfWeek(date, { weekStartsOn: 0 });
+
+            return differenceInCalendarWeeks(currentWeekStart, firstWeekStart, { weekStartsOn: 0 }) + 1;
+        } catch (error) {
+            console.error(`Erro ao calcular semana para data: ${data}`, error);
+            return null;
+        }
     }
 }
 
@@ -58,14 +75,65 @@ class Month extends Data {
         return 12;
     }
 
-    currentMonth() {
-        return new Date().getMonth() + 1;
+    currentMonth(data) {
+        try {
+            const date = parseISO(data);
+            return date.getMonth() + 1;
+        } catch (error) {
+            console.error(`Erro ao processar mês para data: ${data}`, error);
+            return null;
+        }
     }
+}
+
+const dia = new Day();
+const semana = new Week();
+const mes = new Month();
+
+function groupDatesBy(dates, groupingMethod) {
+    if (!Array.isArray(dates)) {
+        console.error('Erro: dates precisa ser um array.');
+        return {};
+    }
+
+    const grouped = {};
+    console.log('CHAMOU', groupingMethod);
+
+    dates.forEach(({ data }) => {
+        if (!data) {
+            console.error('Erro: Data inválida encontrada na lista.');
+            return;
+        }
+
+        let key;
+        switch (groupingMethod) {
+            case 'month':
+                key = mes.currentMonth(data);
+                break;
+            case 'week':
+                key = semana.currentWeek(data);
+                break;
+            case 'day':
+                key = dia.today(data);
+                break;
+            default:
+                key = 'other';
+        }
+
+        if (key !== null) {
+            console.log(`Data ${data} -> Chave agrupamento: ${key}`);
+            grouped[key] = true;
+        }
+    });
+
+    console.log("Dias checados para calendário diário:", grouped);
+    return grouped;
 }
 
 module.exports = {
     data: new Data(),
-    day: new Day(),
-    week: new Week(),
-    month: new Month(),
-}
+    day: dia,
+    week: semana,
+    month: mes,
+    groupDatesBy,
+};
