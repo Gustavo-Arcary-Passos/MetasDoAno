@@ -52,29 +52,32 @@ class SquareColor {
         `;
     }
 
-    addClickListener(squareElement, colorActive) {
-        squareElement.addEventListener('click', () => {
-            const currentColor = squareElement.style.backgroundColor;
-            
-            if (currentColor === colorActive) {
-                squareElement.style.backgroundColor = this.color;
-            } else {
-                squareElement.style.backgroundColor = colorActive;
-            }
-        });
-    }
 }
 
 class SquareGenerator {
-    generateSquare(container, squareClasses, squareColor, colorActive, selected = false) {
+    generateSquare(container, squareClasses, squareColorDeactive, squareColorActive, index = -1, selected = false) {
         const square = document.createElement("div");
         square.className = squareClasses.join(" ");
+        square.dataset.index = index;
 
-        if(!squareClasses.includes("quadrado-transparency")) {
-            if(selected) {
-                square.style.backgroundColor = colorActive;
+        if (!squareClasses.includes("quadrado-transparency")) {
+            if (selected) {
+                square.classList.remove(squareColorDeactive);
+                square.classList.add(squareColorActive);
             }
-            squareColor.addClickListener(square, colorActive);
+
+            square.addEventListener("click", (event) => {
+                const target = event.currentTarget;
+                const squareNumber = target.dataset.index;
+
+                if (target.classList.contains(squareColorDeactive)) {
+                    target.classList.remove(squareColorDeactive);
+                    target.classList.add(squareColorActive);
+                } else {
+                    target.classList.remove(squareColorActive);
+                    target.classList.add(squareColorDeactive);
+                }
+            });
         }
 
         container.appendChild(square);
@@ -93,11 +96,13 @@ function generateCalendarDay(year, squareSize, borderSize, colorDefault, colorAc
 
         const squareInstance = new SquareGenerator();
         const squareStyle = new SquareModel("quadrado-estilo", squareSize, borderSize, 0);
-        const squareColor = new SquareColor("quadrado-color", colorDefault, "1px solid rgb(0,0,0)");
+        const squareColorDeactive = new SquareColor("quadrado-deactive", colorDefault, "1px solid rgb(0,0,0)");
+        const squareColorActive = new SquareColor("quadrado-active", colorActive, "1px solid rgb(0,0,0)");
         const squareTransparency = new SquareColor("quadrado-transparency", "rgba(0,0,0,0)", "1px solid rgba(0,0,0,0)");
 
         squareStyle.addStyle();
-        squareColor.addStyle();
+        squareColorDeactive.addStyle();
+        squareColorActive.addStyle();
         squareTransparency.addStyle();
 
         const container = document.getElementById("calendar");
@@ -122,14 +127,14 @@ function generateCalendarDay(year, squareSize, borderSize, colorDefault, colorAc
             let dayWeek = Math.floor(i / weeks);
             let week = i % weeks;
             if (week == 0 && dayWeek < start) {
-                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColor, colorActive);
+                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColorDeactive.className, squareColorActive.className);
                 blank += 1;
             } else if (week == (weeks - 1) && dayWeek > end) {
-                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColor, colorActive);
+                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColorDeactive.className, squareColorActive.className);
                 blank += 1;
             } else {
                 pos = week*7 + (dayWeek - start + 1);
-                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-color"], squareColor, colorActive, shouldBeActive.hasOwnProperty(pos));
+                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-deactive"], squareColorDeactive.className, squareColorActive.className, shouldBeActive.hasOwnProperty(pos));
             }
         }
     }).catch(error => {

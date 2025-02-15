@@ -97,7 +97,7 @@ function groupDatesBy(dates, groupingMethod) {
     }
 
     const grouped = {};
-    console.log('CHAMOU', groupingMethod);
+    // console.log('CHAMOU', groupingMethod);
 
     dates.forEach(({ data }) => {
         if (!data) {
