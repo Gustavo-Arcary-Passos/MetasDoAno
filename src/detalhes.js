@@ -14,15 +14,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById("rotinaFrequencia").innerText = typeFreq || "Frequência não encontrada";
 
     let data = await window.api.getRotinaDatas(rotinaNome);
-
-    // if (data && data.length > 0) {
-    //     console.log("Datas das atividades realizadas:");
-    //     data.forEach(entry => {
-    //         console.log(`Data: ${entry.data}`);
-    //     });
-    // } else {
-    //     console.log("Nenhuma data encontrada.");
-    // }
     
     if (typeFreq === "Diária") {
         let dayCheckedRotinas = await window.api.groupDatesBy(data, 'day');

@@ -1,7 +1,7 @@
 const { 
-    startOfWeek, startOfMonth, endOfWeek, endOfYear, 
+    addDays, startOfWeek, startOfMonth, startOfYear, endOfWeek, endOfYear, 
     getDay, getDayOfYear, differenceInCalendarWeeks, 
-    format, parseISO 
+    format, parseISO
 } = require('date-fns');
 
 class Data {
@@ -21,7 +21,7 @@ class Day extends Data {
 
     countWeeksInYear(year) {
         const start = startOfWeek(new Date(year, 0, 1), { weekStartsOn: 0 });
-        const end = endOfYear(new Date(year, 0, 1)); // Correção
+        const end = endOfYear(new Date(year, 0, 1));
         return differenceInCalendarWeeks(end, start, { weekStartsOn: 0 }) + 1;
     }
 
@@ -35,6 +35,16 @@ class Day extends Data {
             return getDayOfYear(date);
         } catch (error) {
             console.error(`Erro ao processar data: ${data}`, error);
+            return null;
+        }
+    }
+
+    dayFromNumber(year, dayNumber) {
+        try {
+            const date = addDays(startOfYear(new Date(year, 0, 1)), dayNumber - 1);
+            return date.toISOString().split("T")[0];
+        } catch (error) {
+            console.error(`Erro ao converter dia do ano para data: ${dayNumber}`, error);
             return null;
         }
     }
@@ -68,6 +78,17 @@ class Week extends Data {
             return null;
         }
     }
+
+    weekFromNumber(year, weekNumber) {
+        try {
+            const firstWeekStart = startOfWeek(startOfYear(new Date(year, 0, 1)), { weekStartsOn: 0 });
+            const targetWeekStart = addWeeks(firstWeekStart, weekNumber - 1);
+            return targetWeekStart.toISOString().split("T")[0];
+        } catch (error) {
+            console.error(`Erro ao converter número da semana para data: ${weekNumber}`, error);
+            return null;
+        }
+    }
 }
 
 class Month extends Data {
@@ -84,6 +105,16 @@ class Month extends Data {
             return null;
         }
     }
+
+    monthFromNumber(year, monthNumber) {
+        try {
+            const date = new Date(year, monthNumber - 1, 1);
+            return date.toISOString().split("T")[0];
+        } catch (error) {
+            console.error(`Erro ao converter número do mês para data: ${monthNumber}`, error);
+            return null;
+        }
+    }
 }
 
 const dia = new Day();
@@ -97,7 +128,6 @@ function groupDatesBy(dates, groupingMethod) {
     }
 
     const grouped = {};
-    // console.log('CHAMOU', groupingMethod);
 
     dates.forEach(({ data }) => {
         if (!data) {

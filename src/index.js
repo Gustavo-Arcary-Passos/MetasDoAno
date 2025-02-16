@@ -9,11 +9,14 @@ ipcMain.handle('count-days', (event, year) => day.countDaysInYear(year));
 ipcMain.handle('first-day', (event, year) => day.firstDayYear(year));
 ipcMain.handle('last-day', (event, year) => day.lastDayYear(year));
 ipcMain.handle('today', (event,data) => day.today(data));
+ipcMain.handle('day-number', (event, year, dayNumber) => day.dayFromNumber(year, dayNumber));
 ipcMain.handle('weeks-in-month', (event, year, month) => week.countWeeksInMonth(year, month));
 ipcMain.handle('weeks-in-all-month', (event, year) => week.countWeeksInAllMonths(year));
 ipcMain.handle('current-week', (event,data) => week.currentWeek(data));
+ipcMain.handle('week-number', (event, year, weekNumber) => week.weekFromNumber(year, weekNumber));
 ipcMain.handle('months-in-year', (event) => month.countMonthsInYear());
 ipcMain.handle('current-month', (event, data) => month.currentMonth(data));
+ipcMain.handle('month-number', (event, year, monthNumber) => month.monthFromNumber(year, monthNumber));
 ipcMain.handle('group-by-selected', (event, data, type) => groupDatesBy(data, type));
 
 ipcMain.handle('get-rotinas', () => getRotinas());

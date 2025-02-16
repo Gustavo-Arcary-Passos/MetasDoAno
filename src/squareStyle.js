@@ -55,8 +55,9 @@ class SquareColor {
 }
 
 class SquareGenerator {
-    generateSquare(container, squareClasses, squareColorDeactive, squareColorActive, index = -1, selected = false) {
+    generateSquare(container, squareClasses, squareColorDeactive, squareColorActive, calendarConverter = ( year, index) => index,index = -1, selected = false) {
         const square = document.createElement("div");
+        const rotina = document.getElementById("rotinaNome").innerText;
         square.className = squareClasses.join(" ");
         square.dataset.index = index;
 
@@ -66,14 +67,16 @@ class SquareGenerator {
                 square.classList.add(squareColorActive);
             }
 
-            square.addEventListener("click", (event) => {
+            square.addEventListener("click", async (event) => {
                 const target = event.currentTarget;
                 const squareNumber = target.dataset.index;
-
+                const data = await calendarConverter(2025, squareNumber);
                 if (target.classList.contains(squareColorDeactive)) {
+                    await window.api.adicionarRotinaData(rotina, data);
                     target.classList.remove(squareColorDeactive);
                     target.classList.add(squareColorActive);
                 } else {
+                    await window.api.removerRotinaData(rotina, data);
                     target.classList.remove(squareColorActive);
                     target.classList.add(squareColorDeactive);
                 }
@@ -127,14 +130,14 @@ function generateCalendarDay(year, squareSize, borderSize, colorDefault, colorAc
             let dayWeek = Math.floor(i / weeks);
             let week = i % weeks;
             if (week == 0 && dayWeek < start) {
-                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColorDeactive.className, squareColorActive.className);
+                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColorDeactive.className, squareColorActive.className, window.api.dayFromNumber);
                 blank += 1;
             } else if (week == (weeks - 1) && dayWeek > end) {
-                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColorDeactive.className, squareColorActive.className);
+                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColorDeactive.className, squareColorActive.className, window.api.dayFromNumber);
                 blank += 1;
             } else {
                 pos = week*7 + (dayWeek - start + 1);
-                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-deactive"], squareColorDeactive.className, squareColorActive.className, shouldBeActive.hasOwnProperty(pos));
+                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-deactive"], squareColorDeactive.className, squareColorActive.className, window.api.dayFromNumber,pos, shouldBeActive.hasOwnProperty(pos));
             }
         }
     }).catch(error => {
