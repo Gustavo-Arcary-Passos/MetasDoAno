@@ -7,11 +7,25 @@ document.addEventListener("DOMContentLoaded", async function () {
     const typeFreq = getParametro("frequencia");
     const rotinaNome = getParametro("nome");
 
+
     console.log("Nome da rotina:", rotinaNome);
 
     document.getElementById("rotinaNome").innerText = rotinaNome || "Nome não encontrado";
     document.getElementById("rotinaDescricao").innerText = getParametro("descricao") || "Descrição não encontrada";
     document.getElementById("rotinaFrequencia").innerText = typeFreq || "Frequência não encontrada";
+
+    let checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = "tarefaCheckbox";
+    checkbox.classList.add("tarefa-checkbox");
+
+    let label = document.createElement("label");
+    label.setAttribute("for", "tarefaCheckbox");
+    label.textContent = "Edit";
+    
+    let container = document.getElementById("tarefaCheckboxContainer");
+    container.appendChild(label);
+    container.appendChild(checkbox);
 
     let data = await window.api.getRotinaDatas(rotinaNome);
     

@@ -71,14 +71,17 @@ class SquareGenerator {
                 const target = event.currentTarget;
                 const squareNumber = target.dataset.index;
                 const data = await calendarConverter(2025, squareNumber);
-                if (target.classList.contains(squareColorDeactive)) {
-                    await window.api.adicionarRotinaData(rotina, data);
-                    target.classList.remove(squareColorDeactive);
-                    target.classList.add(squareColorActive);
-                } else {
-                    await window.api.removerRotinaData(rotina, data);
-                    target.classList.remove(squareColorActive);
-                    target.classList.add(squareColorDeactive);
+                let checkbox = document.getElementById("tarefaCheckbox");
+                if(checkbox.checked){
+                    if (target.classList.contains(squareColorDeactive)) {
+                        await window.api.adicionarRotinaData(rotina, data);
+                        target.classList.remove(squareColorDeactive);
+                        target.classList.add(squareColorActive);
+                    } else {
+                        await window.api.removerRotinaData(rotina, data);
+                        target.classList.remove(squareColorActive);
+                        target.classList.add(squareColorDeactive);
+                    }
                 }
             });
         }
