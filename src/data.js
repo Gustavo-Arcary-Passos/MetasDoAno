@@ -1,5 +1,5 @@
 const { 
-    addDays, startOfWeek, startOfMonth, startOfYear, endOfWeek, endOfYear, 
+    addDays, addWeeks, startOfWeek, startOfMonth, startOfYear, endOfWeek, endOfYear, 
     getDay, getDayOfYear, differenceInCalendarWeeks, 
     format, parseISO
 } = require('date-fns');
@@ -53,15 +53,15 @@ class Day extends Data {
 class Week extends Data {
     countWeeksInMonth(year, month) {
         const firstDayOfMonth = new Date(year, month, 1);
+        
         const firstSunday = new Date(firstDayOfMonth);
         firstSunday.setDate(firstDayOfMonth.getDate() + (7 - firstDayOfMonth.getDay()) % 7);
         
         const lastDayOfMonth = new Date(year, month + 1, 0);
 
-        const startWeek = startOfWeek(firstSunday, { weekStartsOn: 0 });
-        const endWeek = endOfWeek(lastDayOfMonth, { weekStartsOn: 0 });
-        
-        return differenceInCalendarWeeks(endWeek, startWeek, { weekStartsOn: 0 }) + 1;
+        const lastSunday = endOfWeek(lastDayOfMonth, { weekStartsOn: 0 });
+
+        return differenceInCalendarWeeks(lastSunday, firstSunday, { weekStartsOn: 0 }) + 1;
     }
 
     countWeeksInAllMonths(year) {
@@ -73,11 +73,19 @@ class Week extends Data {
     currentWeek(data) {
         try {
             const date = parseISO(data);
-            const firstDayOfMonth = startOfMonth(date);
-            const firstWeekStart = startOfWeek(firstDayOfMonth, { weekStartsOn: 0 });
+            
+            const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+            
+            const firstSunday = new Date(firstDayOfYear);
+            firstSunday.setDate(firstDayOfYear.getDate() + (7 - firstDayOfYear.getDay()) % 7);
+            
             const currentWeekStart = startOfWeek(date, { weekStartsOn: 0 });
-
-            return differenceInCalendarWeeks(currentWeekStart, firstWeekStart, { weekStartsOn: 0 }) + 1;
+    
+            const weekNumber = differenceInCalendarWeeks(currentWeekStart, firstSunday, { weekStartsOn: 0 }) + 1;
+            
+            console.log(`Semana calculada: ${weekNumber}`);
+    
+            return weekNumber;
         } catch (error) {
             console.error(`Erro ao calcular semana para data: ${data}`, error);
             return null;
@@ -86,8 +94,18 @@ class Week extends Data {
 
     weekFromNumber(year, weekNumber) {
         try {
-            const firstWeekStart = startOfWeek(startOfYear(new Date(year, 0, 1)), { weekStartsOn: 0 });
-            const targetWeekStart = addWeeks(firstWeekStart, weekNumber - 1);
+            console.log(`weekNumber recebido: ${weekNumber}`);
+
+            const firstDayOfYear = new Date(year, 0, 1);
+            const firstSunday = startOfWeek(firstDayOfYear, { weekStartsOn: 0 });
+
+            const targetWeekStart = addWeeks(firstSunday, weekNumber - 1);
+
+            if (targetWeekStart.getFullYear() !== year) {
+                console.warn(`Ajustando weekNumber ${weekNumber}, pois ultrapassou o ano ${year}.`);
+                return null;
+            }
+
             return targetWeekStart.toISOString().split("T")[0];
         } catch (error) {
             console.error(`Erro ao converter número da semana para data: ${weekNumber}`, error);

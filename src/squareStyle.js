@@ -154,6 +154,12 @@ function generateCalendarWeek(year, squareSize, borderSize, colorDefault, colorA
         window.api.countWeeksInAllMonths(year),
     ]).then(([weeks, weeksMonth]) => {
         console.log(`Número de semanas em ${weeks}: ${weeksMonth}`);
+        let weeksMonthCopy = weeksMonth.slice();
+        function somaAteIndice(lista, x) {
+            if (x < 0) return 0;
+            return lista.slice(0, x + 1).reduce((acc, num) => acc + num, 0);
+        }
+
         const squareInstance = new SquareGenerator();
         const squareStyle = new SquareModel("quadrado-estilo", squareSize, borderSize, 0);
         const squareColorDeactive = new SquareColor("quadrado-deactive", colorDefault, "1px solid rgb(0,0,0)");
@@ -185,13 +191,13 @@ function generateCalendarWeek(year, squareSize, borderSize, colorDefault, colorA
         let pos;
         for (let i = 0; i < weeks + blank; i++) {
             month = i % weeksMonth.length;
-            if (weeksMonth[month] === 0) {
+            if (weeksMonthCopy[month] === 0) {
                 squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColorDeactive.className, squareColorActive.className, window.api.weekFromNumber);
                 blank = blank + 1;
             } else {
-                
-                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-deactive"], squareColorDeactive.className, squareColorActive.className, window.api.weekFromNumber,shouldBeActive.hasOwnProperty(pos));
-                weeksMonth[month] = weeksMonth[month] - 1;
+                pos = somaAteIndice(weeksMonth,month-1) + Math.floor(i/weeksMonth.length) + 1;
+                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-deactive"], squareColorDeactive.className, squareColorActive.className, window.api.weekFromNumber, pos + 1, shouldBeActive.hasOwnProperty(pos));
+                weeksMonthCopy[month] = weeksMonthCopy[month] - 1;
             }
             if(month < blank && i > weeks){
                 break;

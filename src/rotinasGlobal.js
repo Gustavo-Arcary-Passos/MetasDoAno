@@ -51,12 +51,22 @@ function getRotinaDatas(nome) {
 
 function adicionarRotinaData(nome, data) {
     try {
+        const stmtCheck = db.prepare("SELECT COUNT(*) AS count FROM rotinas_historico WHERE nome = ? AND data = ?");
+        const row = stmtCheck.get(nome, data);
+
+        if (row.count > 0) {
+            console.log(`A rotina ${nome} para a data ${data} já existe.`);
+            return false;
+        }
+        
         const stmt = db.prepare("INSERT INTO rotinas_historico (nome, data) VALUES (?, ?)");
         stmt.run(nome, data);
+
         if (stmt.changes > 0) {
             console.log(`Rotina ${nome} adicionada para a data ${data}`);
             return true;
         }
+
         return false;
     } catch (err) {
         console.error(`Erro ao adicionar data da rotina: ${nome} e ${data}`, err.message);

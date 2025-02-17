@@ -29,7 +29,17 @@ async function atualizarRotinasChecadas(rotinas, dataHoje) {
         
         if (estaMarcada && !nomesRotinasChecked.has(rotina.nome)) {
             console.log(`Adicionando rotina: ${rotina.nome}`);
-            const sucesso = await window.api.adicionarRotinaData(rotina.nome, dataHoje);
+            if (rotina.frequency == "Diária") {
+                const sucesso = await window.api.adicionarRotinaData(rotina.nome, dataHoje);
+            } else if (rotina.frequency == "Semanal") {
+                // converte o dia de hoje para o dia da semana 
+                // dataDomingo = converter(dataHoje);
+                const sucesso = await window.api.adicionarRotinaData(rotina.nome, dataDomingo);
+            } else if (rotina.frequency == "Mensal") {
+                // converte o dia de hoje para o primeiro dia do mes
+                // dataFirstDayMonth = converter(dataHoje);
+                const sucesso = await window.api.adicionarRotinaData(rotina.nome, dataFirstDayMonth);
+            }
             if (sucesso) {
                 console.log(`Rotina ${rotina.nome} adicionada com sucesso.`);
             } else {
