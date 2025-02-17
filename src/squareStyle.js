@@ -156,11 +156,13 @@ function generateCalendarWeek(year, squareSize, borderSize, colorDefault, colorA
         console.log(`Número de semanas em ${weeks}: ${weeksMonth}`);
         const squareInstance = new SquareGenerator();
         const squareStyle = new SquareModel("quadrado-estilo", squareSize, borderSize, 0);
-        const squareColor = new SquareColor("quadrado-color", colorDefault, "1px solid rgb(0,0,0)");
+        const squareColorDeactive = new SquareColor("quadrado-deactive", colorDefault, "1px solid rgb(0,0,0)");
+        const squareColorActive = new SquareColor("quadrado-active", colorActive, "1px solid rgb(0,0,0)");
         const squareTransparency = new SquareColor("quadrado-transparency", "rgba(0,0,0,0)", "1px solid rgba(0,0,0,0)");
 
         squareStyle.addStyle();
-        squareColor.addStyle();
+        squareColorDeactive.addStyle();
+        squareColorActive.addStyle();
         squareTransparency.addStyle();
 
         const container = document.getElementById("calendar");
@@ -180,13 +182,15 @@ function generateCalendarWeek(year, squareSize, borderSize, colorDefault, colorA
         `;  
         let month;
         let blank = 0;
+        let pos;
         for (let i = 0; i < weeks + blank; i++) {
             month = i % weeksMonth.length;
             if (weeksMonth[month] === 0) {
-                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColor, colorActive);
+                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareColorDeactive.className, squareColorActive.className, window.api.weekFromNumber);
                 blank = blank + 1;
             } else {
-                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-color"], squareColor, colorActive);
+                
+                squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-deactive"], squareColorDeactive.className, squareColorActive.className, window.api.weekFromNumber,shouldBeActive.hasOwnProperty(pos));
                 weeksMonth[month] = weeksMonth[month] - 1;
             }
             if(month < blank && i > weeks){

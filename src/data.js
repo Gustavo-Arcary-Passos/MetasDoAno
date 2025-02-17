@@ -53,16 +53,21 @@ class Day extends Data {
 class Week extends Data {
     countWeeksInMonth(year, month) {
         const firstDayOfMonth = new Date(year, month, 1);
-        const lastDayOfMonth = new Date(year, month + 1, 0);
+        const firstSunday = new Date(firstDayOfMonth);
+        firstSunday.setDate(firstDayOfMonth.getDate() + (7 - firstDayOfMonth.getDay()) % 7);
         
-        const startWeek = startOfWeek(firstDayOfMonth, { weekStartsOn: 0 });
+        const lastDayOfMonth = new Date(year, month + 1, 0);
+
+        const startWeek = startOfWeek(firstSunday, { weekStartsOn: 0 });
         const endWeek = endOfWeek(lastDayOfMonth, { weekStartsOn: 0 });
         
         return differenceInCalendarWeeks(endWeek, startWeek, { weekStartsOn: 0 }) + 1;
     }
 
     countWeeksInAllMonths(year) {
-        return Array.from({ length: 12 }, (_, month) => this.countWeeksInMonth(year, month));
+        const result = Array.from({ length: 12 }, (_, month) => this.countWeeksInMonth(year, month));
+        console.log(result);
+        return result;
     }
 
     currentWeek(data) {
