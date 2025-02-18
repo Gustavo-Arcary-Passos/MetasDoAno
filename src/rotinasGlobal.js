@@ -1,4 +1,5 @@
 const db = require('./database');
+const { data, day, week, month, groupDatesBy } = require('./data');
 
 class Rotina {
     constructor(nome, description, frequency) {
@@ -36,10 +37,37 @@ function removerRotina(nome) {
 }
 
 function getRotinaHoje(data) {
-    const stmt = db.prepare('SELECT nome FROM rotinas_historico WHERE data = ?');
-    const rotinasChecked = stmt.all(data);
-    console.log("Rotinas marcadas hoje:", rotinasChecked);
-    return rotinasChecked;
+    const primeiroDomingo = week.getSundayOfWeek(data); // Obtém o primeiro domingo da semana
+    const primeiroDiaMes = month.getFirstDayOfMonth(data); // Obtém o primeiro dia do mês
+
+    const stmtDiaria = db.prepare(`
+        SELECT r.nome 
+        FROM rotinas_historico rh 
+        JOIN rotinas r ON rh.nome = r.nome 
+        WHERE rh.data = ? AND r.frequency = 'Diária'
+    `);
+    const rotinasDiarias = stmtDiaria.all(data);
+
+    const stmtSemanal = db.prepare(`
+        SELECT r.nome 
+        FROM rotinas_historico rh 
+        JOIN rotinas r ON rh.nome = r.nome 
+        WHERE rh.data = ? AND r.frequency = 'Semanal'
+    `);
+    const rotinasSemanais = stmtSemanal.all(primeiroDomingo);
+
+    const stmtMensal = db.prepare(`
+        SELECT r.nome 
+        FROM rotinas_historico rh 
+        JOIN rotinas r ON rh.nome = r.nome 
+        WHERE rh.data = ? AND r.frequency = 'Mensal'
+    `);
+    const rotinasMensais = stmtMensal.all(primeiroDiaMes);
+
+    const rotinasHoje = [...rotinasDiarias, ...rotinasSemanais, ...rotinasMensais];
+
+    console.log("Rotinas marcadas hoje:", rotinasHoje);
+    return rotinasHoje;
 }
 
 function getRotinaDatas(nome) {

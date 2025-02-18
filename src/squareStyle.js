@@ -212,11 +212,13 @@ function generateCalendarMonth(squareSize, borderSize, colorDefault, colorActive
     window.api.countMonthsInYear().then((months) => {
         const squareInstance = new SquareGenerator();
         const squareStyle = new SquareModel("quadrado-estilo", squareSize, borderSize, 0);
-        const squareColor = new SquareColor("quadrado-color", colorDefault, "1px solid rgb(0,0,0)");
+        const squareColorDeactive = new SquareColor("quadrado-deactive", colorDefault, "1px solid rgb(0,0,0)");
+        const squareColorActive = new SquareColor("quadrado-active", colorActive, "1px solid rgb(0,0,0)");
         const squareTransparency = new SquareColor("quadrado-transparency", "rgba(0,0,0,0)", "1px solid rgba(0,0,0,0)");
 
         squareStyle.addStyle();
-        squareColor.addStyle();
+        squareColorDeactive.addStyle();
+        squareColorActive.addStyle();
         squareTransparency.addStyle();
 
         const container = document.getElementById("calendar");
@@ -236,7 +238,7 @@ function generateCalendarMonth(squareSize, borderSize, colorDefault, colorActive
         `;
 
         for (let i = 0; i < months; i++) {
-            squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-color"], squareColor, colorActive);
+            squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-deactive"], squareColorDeactive.className, squareColorActive.className, window.api.monthFromNumber, i+1, shouldBeActive.hasOwnProperty(i+1));
         }
     }).catch(error => {
         console.error("Erro ao gerar o calendário:", error);

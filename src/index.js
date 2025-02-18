@@ -14,9 +14,11 @@ ipcMain.handle('weeks-in-month', (event, year, month) => week.countWeeksInMonth(
 ipcMain.handle('weeks-in-all-month', (event, year) => week.countWeeksInAllMonths(year));
 ipcMain.handle('current-week', (event,data) => week.currentWeek(data));
 ipcMain.handle('week-number', (event, year, weekNumber) => week.weekFromNumber(year, weekNumber));
+ipcMain.handle('day-to-sunday', (event, dateString) => week.getSundayOfWeek(dateString));
 ipcMain.handle('months-in-year', (event) => month.countMonthsInYear());
 ipcMain.handle('current-month', (event, data) => month.currentMonth(data));
 ipcMain.handle('month-number', (event, year, monthNumber) => month.monthFromNumber(year, monthNumber));
+ipcMain.handle('day-to-start-of-month', (event, dateString) => month.getFirstDayOfMonth(dateString));
 ipcMain.handle('group-by-selected', (event, data, type) => groupDatesBy(data, type));
 
 ipcMain.handle('get-rotinas', () => getRotinas());

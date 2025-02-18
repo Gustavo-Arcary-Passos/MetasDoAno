@@ -112,6 +112,19 @@ class Week extends Data {
             return null;
         }
     }
+
+    getSundayOfWeek(dateString) {
+        try {
+            const date = parseISO(dateString);
+            const sunday = startOfWeek(date, { weekStartsOn: 0 });
+            const sundayFormat = format(sunday, 'yyyy-MM-dd');
+            console.log(sundayFormat);
+            return sundayFormat;
+        } catch (error) {
+            console.error(`Erro ao calcular domingo da semana para data: ${dateString}`, error);
+            return null;
+        }
+    }
 }
 
 class Month extends Data {
@@ -135,6 +148,17 @@ class Month extends Data {
             return date.toISOString().split("T")[0];
         } catch (error) {
             console.error(`Erro ao converter número do mês para data: ${monthNumber}`, error);
+            return null;
+        }
+    }
+
+    getFirstDayOfMonth(dateString) {
+        try {
+            const date = parseISO(dateString);
+            const firstDay = startOfMonth(date);
+            return format(firstDay, 'yyyy-MM-dd');
+        } catch (error) {
+            console.error(`Erro ao calcular o primeiro dia do mês para data: ${dateString}`, error);
             return null;
         }
     }

@@ -29,16 +29,17 @@ async function atualizarRotinasChecadas(rotinas, dataHoje) {
         
         if (estaMarcada && !nomesRotinasChecked.has(rotina.nome)) {
             console.log(`Adicionando rotina: ${rotina.nome}`);
+            let sucesso;
             if (rotina.frequency == "Diária") {
-                const sucesso = await window.api.adicionarRotinaData(rotina.nome, dataHoje);
+                sucesso = await window.api.adicionarRotinaData(rotina.nome, dataHoje);
             } else if (rotina.frequency == "Semanal") {
                 // converte o dia de hoje para o dia da semana 
-                // dataDomingo = converter(dataHoje);
-                const sucesso = await window.api.adicionarRotinaData(rotina.nome, dataDomingo);
+                const dataDomingo = await window.api.getSundayOfWeek(dataHoje);
+                sucesso = await window.api.adicionarRotinaData(rotina.nome, dataDomingo);
             } else if (rotina.frequency == "Mensal") {
                 // converte o dia de hoje para o primeiro dia do mes
-                // dataFirstDayMonth = converter(dataHoje);
-                const sucesso = await window.api.adicionarRotinaData(rotina.nome, dataFirstDayMonth);
+                const dataFirstDayMonth = await window.api.getFirstDayOfMonth(dataHoje);
+                sucesso = await window.api.adicionarRotinaData(rotina.nome, dataFirstDayMonth);
             }
             if (sucesso) {
                 console.log(`Rotina ${rotina.nome} adicionada com sucesso.`);
@@ -49,7 +50,18 @@ async function atualizarRotinasChecadas(rotinas, dataHoje) {
         
         if (!estaMarcada && nomesRotinasChecked.has(rotina.nome)) {
             console.log(`Removendo rotina: ${rotina.nome}`);
-            const sucesso = await window.api.removerRotinaData(rotina.nome, dataHoje);
+            let sucesso;
+            if (rotina.frequency == "Diária") {
+                sucesso = await window.api.removerRotinaData(rotina.nome, dataHoje);
+            } else if (rotina.frequency == "Semanal") {
+                // converte o dia de hoje para o dia da semana 
+                const dataDomingo = await window.api.getSundayOfWeek(dataHoje);
+                sucesso = await window.api.removerRotinaData(rotina.nome, dataDomingo);
+            } else if (rotina.frequency == "Mensal") {
+                // converte o dia de hoje para o primeiro dia do mes
+                const dataFirstDayMonth = await window.api.getFirstDayOfMonth(dataHoje);
+                sucesso = await window.api.removerRotinaData(rotina.nome, dataFirstDayMonth);
+            }
             if (sucesso) {
                 console.log(`Rotina ${rotina.nome} removida com sucesso.`);
             } else {
