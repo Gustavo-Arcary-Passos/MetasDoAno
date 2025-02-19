@@ -7,7 +7,8 @@ const db = new Database(dbPath, { verbose: console.log });
 db.exec(`CREATE TABLE IF NOT EXISTS rotinas (
     nome TEXT PRIMARY KEY,  -- Tornando o nome a chave primária
     description TEXT,
-    frequency TEXT
+    frequency TEXT,
+    color TEXT
 )`);
 
 db.exec(`CREATE TABLE IF NOT EXISTS rotinas_historico (

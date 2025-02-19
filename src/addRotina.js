@@ -4,6 +4,8 @@ formRotina.addEventListener("submit", async function(event) {
     let nome = document.getElementById("nome").value.trim();
     let descricao = document.getElementById("descricao").value.trim();
     let frequencia = document.getElementById("frequencia").value;
+    let color = paraRGB(document.getElementById("color").value);
+
 
     if (nome === "" || descricao === "" || frequencia === "") {
         alert("Por favor, preencha todos os campos antes de adicionar a rotina.");
@@ -11,7 +13,7 @@ formRotina.addEventListener("submit", async function(event) {
     }
 
     try {
-        await window.api.addRotina(nome, descricao, frequencia);
+        await window.api.addRotina(nome, descricao, frequencia, color);
 
         window.location.href = "rotina.html";
     } catch (error) {

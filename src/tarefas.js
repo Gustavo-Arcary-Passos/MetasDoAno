@@ -12,7 +12,7 @@ async function carregarRotinas() {
     rotinas.forEach(rotina => {
         let estaMarcada = nomesRotinasChecked.has(rotina.nome);
         
-        let rotinaObj = new Rotina(rotina.nome, rotina.description, rotina.frequency, estaMarcada);
+        let rotinaObj = new Rotina(rotina.nome, rotina.description, rotina.frequency, rotina.color, estaMarcada);
         listaRotinas.appendChild(rotinaObj.showTarefaInfo());
     });
 }

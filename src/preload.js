@@ -19,7 +19,7 @@ contextBridge.exposeInMainWorld('api', {
   getFirstDayOfMonth: (dateString) => ipcRenderer.invoke('day-to-start-of-month', dateString),
   groupDatesBy: (data, type) => ipcRenderer.invoke('group-by-selected',data, type),
   getRotinas: () => ipcRenderer.invoke('get-rotinas'),
-  addRotina: (nome, descricao, frequencia) => ipcRenderer.invoke('add-rotina', nome, descricao, frequencia),
+  addRotina: (nome, descricao, frequencia, color) => ipcRenderer.invoke('add-rotina', nome, descricao, frequencia, color),
   deleteRotina: (nome) => ipcRenderer.invoke('delete-rotina', nome),
   getRotinaHoje: (data) => ipcRenderer.invoke('get-rotina-hoje', data),
   getRotinaDatas: (nome) => ipcRenderer.invoke('get-rotina-datas', nome),

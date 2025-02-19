@@ -14,10 +14,10 @@ function getRotinas() {
     return stmt.all(); 
 }
 
-function adicionarRotina(nome, description, frequency) {
+function adicionarRotina(nome, description, frequency, color) {
     try {
-        const stmt = db.prepare("INSERT INTO rotinas (nome, description, frequency) VALUES (?, ?, ?)");
-        stmt.run(nome, description, frequency);
+        const stmt = db.prepare("INSERT INTO rotinas (nome, description, frequency, color) VALUES (?, ?, ?, ?)");
+        stmt.run(nome, description, frequency, color);
         return true;
     } catch (err) {
         console.error('Erro ao adicionar rotina:', err.message);

@@ -1,15 +1,18 @@
 
 class Rotina {
-    constructor(nome, description, frequency, checked = false) {
+    constructor(nome, description, frequency, color, checked = false) {
         this.nome = nome;
         this.description = description;
         this.frequency = frequency;
+        this.color = color;
         this.checked = checked;
     }
-
+    
     showRotinaCompleta(rotinas,listaRotinas) {
         let div = document.createElement("div");
         div.classList.add("rotina");
+
+        div.style.backgroundColor = reduzirRGB(this.color, 85);
         
         div.innerHTML = `
             <div class="rotina-content">
@@ -21,7 +24,7 @@ class Rotina {
         `;
         
         div.addEventListener("click", () => {
-            window.location.href = `detalhes.html?nome=${encodeURIComponent(this.nome)}&descricao=${encodeURIComponent(this.description)}&frequencia=${encodeURIComponent(this.frequency)}`;
+            window.location.href = `detalhes.html?nome=${encodeURIComponent(this.nome)}&descricao=${encodeURIComponent(this.description)}&frequencia=${encodeURIComponent(this.frequency)}&color=${encodeURIComponent(this.color)}`;
         });
 
         div.querySelector(".botao-detalhes").addEventListener("click", (event) => {
@@ -37,7 +40,9 @@ class Rotina {
     showTarefaInfo() {
         let div = document.createElement("div");
         div.classList.add("rotina");
-    
+
+        div.style.backgroundColor = reduzirRGB(this.color, 95);
+
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.classList.add("tarefa-checkbox");
@@ -49,7 +54,7 @@ class Rotina {
     
         div.appendChild(checkbox);
         div.appendChild(label);
-    
+
         return div;
     }
 }

@@ -22,7 +22,7 @@ ipcMain.handle('day-to-start-of-month', (event, dateString) => month.getFirstDay
 ipcMain.handle('group-by-selected', (event, data, type) => groupDatesBy(data, type));
 
 ipcMain.handle('get-rotinas', () => getRotinas());
-ipcMain.handle('add-rotina', (event, nome, descricao, frequencia) => adicionarRotina(nome, descricao, frequencia));
+ipcMain.handle('add-rotina', (event, nome, descricao, frequencia, color) => adicionarRotina(nome, descricao, frequencia, color));
 ipcMain.handle('delete-rotina', (event, nome) => removerRotina(nome));
 ipcMain.handle('get-rotina-hoje', (event, data) => getRotinaHoje(data));
 ipcMain.handle('get-rotina-datas', (event, nome) => getRotinaDatas(nome));

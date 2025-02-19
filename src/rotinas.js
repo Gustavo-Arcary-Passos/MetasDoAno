@@ -22,7 +22,7 @@ async function carregarRotinas() {
     let rotinas = await window.api.getRotinas();
 
     rotinas.forEach(rotina => {
-        let rotinaObj = new Rotina(rotina.nome, rotina.description, rotina.frequency);
+        let rotinaObj = new Rotina(rotina.nome, rotina.description, rotina.frequency, rotina.color);
         listaRotinas.appendChild(rotinaObj.showRotinaCompleta());
     });
     listaRotinas.appendChild(addRotina());
