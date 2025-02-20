@@ -117,4 +117,21 @@ function removerRotinaData(nome, data) {
     }
 }
 
-module.exports = { getRotinas, adicionarRotina, removerRotina, getRotinaHoje, getRotinaDatas, adicionarRotinaData, removerRotinaData};
+function countAllRotinasAllDays() {
+    try {
+        const stmt = db.prepare(`
+            SELECT data, COUNT(*) AS count 
+            FROM rotinas_historico 
+            GROUP BY data
+            ORDER BY data ASC
+        `);
+        const tasks = stmt.all();
+        console.log("Rotina dias realizados:", tasks);
+        return tasks;
+    } catch (err) {
+        console.error('Erro ao contar rotinas por data:', err.message);
+        return [];
+    }
+}
+
+module.exports = { getRotinas, adicionarRotina, removerRotina, getRotinaHoje, getRotinaDatas, adicionarRotinaData, removerRotinaData, countAllRotinasAllDays};

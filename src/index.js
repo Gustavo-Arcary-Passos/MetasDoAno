@@ -1,7 +1,7 @@
 const path = require('path');
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { data, day, week, month, groupDatesBy } = require('./data');
-const  { getRotinas, adicionarRotina, removerRotina, getRotinaHoje, getRotinaDatas, adicionarRotinaData, removerRotinaData} = require('./rotinasGlobal');
+const  { getRotinas, adicionarRotina, removerRotina, getRotinaHoje, getRotinaDatas, adicionarRotinaData, removerRotinaData, countAllRotinasAllDays} = require('./rotinasGlobal');
 
 ipcMain.handle('day', (event) => data.day());
 ipcMain.handle('count-weeks', (event, year) => day.countWeeksInYear(year));
@@ -28,7 +28,7 @@ ipcMain.handle('get-rotina-hoje', (event, data) => getRotinaHoje(data));
 ipcMain.handle('get-rotina-datas', (event, nome) => getRotinaDatas(nome));
 ipcMain.handle('add-rotina-data', (event, nome, data) => adicionarRotinaData(nome, data));
 ipcMain.handle('delete-rotina-data', (event, nome, data) => removerRotinaData(nome, data));
-
+ipcMain.handle('count-tasks-calendar', () => countAllRotinasAllDays());
 
 let mainWindow;
 

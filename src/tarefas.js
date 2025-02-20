@@ -15,6 +15,10 @@ async function carregarRotinas() {
         let rotinaObj = new Rotina(rotina.nome, rotina.description, rotina.frequency, rotina.color, estaMarcada);
         listaRotinas.appendChild(rotinaObj.showTarefaInfo());
     });
+
+    await window.api.countAllRotinasAllDays();
+
+    generateCalendarAllTasks(2025, 24, 5, rotinas.length, `rgb(0, 255, 0)`);
 }
 
 async function atualizarRotinasChecadas(rotinas, dataHoje) {

@@ -25,4 +25,5 @@ contextBridge.exposeInMainWorld('api', {
   getRotinaDatas: (nome) => ipcRenderer.invoke('get-rotina-datas', nome),
   adicionarRotinaData: (nome, data) => ipcRenderer.invoke('add-rotina-data', nome, data),
   removerRotinaData: (nome, data) => ipcRenderer.invoke('delete-rotina-data', nome, data),
+  countAllRotinasAllDays: () => ipcRenderer.invoke('count-tasks-calendar'),
 });

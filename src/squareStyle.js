@@ -88,6 +88,14 @@ class SquareGenerator {
 
         container.appendChild(square);
     }
+
+    generateSquareAllTasks(container, squareClasses) {
+        const square = document.createElement("div");
+        square.className = squareClasses.join(" ");
+        square.dataset.index = index;
+
+        container.appendChild(square);
+    }
 }
 
 function generateCalendarDay(year, squareSize, borderSize, colorDefault, colorActive, shouldBeActive) {
@@ -239,6 +247,71 @@ function generateCalendarMonth(squareSize, borderSize, colorDefault, colorActive
 
         for (let i = 0; i < months; i++) {
             squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-deactive"], squareColorDeactive.className, squareColorActive.className, window.api.monthFromNumber, i+1, shouldBeActive.hasOwnProperty(i+1));
+        }
+    }).catch(error => {
+        console.error("Erro ao gerar o calendário:", error);
+    });
+}
+
+function generateCalendarAllTasks(year, squareSize, borderSize, numberTasks, colorActive) {
+    Promise.all([
+        window.api.countWeeksInYear(year),
+        window.api.countDaysInYear(year),
+        window.api.firstDayYear(year),
+        window.api.lastDayYear(year),
+        window.api.countAllRotinasAllDays(year)
+    ]).then(([weeks, daysInYear, start, end, shouldBeActive]) => {
+        console.log(`Número de semanas em ${year}: ${weeks}`);
+        console.log(`Número de dias em ${year}: ${daysInYear}`);
+
+        const squareInstance = new SquareGenerator();
+        const squareStyle = new SquareModel("quadrado-estilo", squareSize, borderSize, 0);
+        const gradientColors = [];
+    
+        for (let i = 0; i < numberTasks; i++) {
+            const factor = (i / (numberTasks - 1))*50 + 50; 
+            const interpolatedColor = reduzirRGB(colorActive, factor);
+            gradientColors.push(new SquareColor(`quadrado-active-${i}`, interpolatedColor, "1px solid rgb(0,0,0)"));
+            gradientColors[i].addStyle();
+        }
+        const squareTransparency = new SquareColor("quadrado-transparency", "rgba(0,0,0,0)", "1px solid rgba(0,0,0,0)");
+
+        squareStyle.addStyle();
+        squareTransparency.addStyle();
+
+        const container = document.getElementById("calendar");
+        const calendarContainer = document.createElement("div");
+        calendarContainer.className = "calendar-container";
+        container.appendChild(calendarContainer);
+
+        let style = document.getElementById("dynamic-styles");
+        style.innerHTML += `
+            .calendar-container {
+                display: grid;
+                grid-template-columns: repeat(${weeks}, 1fr);
+                gap: 2px;
+                justify-content: left;
+                margin: 20px;
+            }
+        `;
+        
+        let blank = 0;
+        let pos;
+        for (let i = 0; i < daysInYear + blank; i++) {
+            let dayWeek = Math.floor(i / weeks);
+            let week = i % weeks;
+            if (week == 0 && dayWeek < start) {
+                squareInstance.generateSquareAllTasks(calendarContainer, ["quadrado-estilo", "quadrado-transparency"]);
+                blank += 1;
+            } else if (week == (weeks - 1) && dayWeek > end) {
+                squareInstance.generateSquareAllTasks(calendarContainer, ["quadrado-estilo", "quadrado-transparency"]);
+                blank += 1;
+            } else {
+                pos = week*7 + (dayWeek - start + 1);
+                if (shouldBeActive.hasOwnProperty(pos)){
+                    squareInstance.generateSquareAllTasks(calendarContainer, ["quadrado-estilo", gradientColors[shouldBeActive[pos]]]);
+                }  
+            }
         }
     }).catch(error => {
         console.error("Erro ao gerar o calendário:", error);
