@@ -16,9 +16,11 @@ async function carregarRotinas() {
         listaRotinas.appendChild(rotinaObj.showTarefaInfo());
     });
 
-    await window.api.countAllRotinasAllDays();
 
-    generateCalendarAllTasks(2025, 24, 5, rotinas.length, `rgb(0, 255, 0)`);
+    let tasksDoneAllDates = await window.api.countAllRotinasAllDays();
+    let calendarFormated = await window.api.groupDatesBy(tasksDoneAllDates, 'overview');
+    
+    generateCalendarAllTasks(2025, 24, 5, rotinas.length, `rgb(0, 255, 0)`, calendarFormated);
 }
 
 async function atualizarRotinasChecadas(rotinas, dataHoje) {

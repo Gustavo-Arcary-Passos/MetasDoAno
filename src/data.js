@@ -176,7 +176,7 @@ function groupDatesBy(dates, groupingMethod) {
 
     const grouped = {};
 
-    dates.forEach(({ data }) => {
+    dates.forEach(({ data, count }) => {
         if (!data) {
             console.error('Erro: Data inválida encontrada na lista.');
             return;
@@ -193,13 +193,18 @@ function groupDatesBy(dates, groupingMethod) {
             case 'day':
                 key = dia.today(data);
                 break;
+            case 'overview':
+                key = dia.today(data);
+                break;
             default:
                 key = 'other';
         }
 
-        if (key !== null) {
+        if (key !== null && groupingMethod != 'overview') {
             console.log(`Data ${data} -> Chave agrupamento: ${key}`);
             grouped[key] = true;
+        } else {
+            grouped[key] = count;
         }
     });
 
