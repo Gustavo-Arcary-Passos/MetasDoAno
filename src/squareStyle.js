@@ -268,15 +268,17 @@ function generateCalendarAllTasks(year, squareSize, borderSize, numberTasks, col
 
         const gradientColors = [];
     
-        for (let i = 0; i < numberTasks; i++) {
-            const factor = numberTasks > 1 ? (i / (numberTasks - 1)) * 50 + 50 : 100;
+        for (let i = 0; i <= numberTasks; i++) {
+            console.log(`factor = ${i}/${numberTasks}*50 + 50`);
+            const factor = (i / (numberTasks)) * 75 + 25;
             const interpolatedColor = reduzirRGB(colorActive, factor);
+            console.log(`i = ${i} factor = ${factor} interpolatedColor = ${interpolatedColor}`);
             gradientColors.push(new SquareColor(`quadrado-active-${i}`, interpolatedColor, "1px solid rgb(0,0,0)"));
             gradientColors[i].addStyle();
         }
         const squareTransparency = new SquareColor("quadrado-transparency", "rgba(0,0,0,0)", "1px solid rgba(0,0,0,0)");
         const squareTest = new SquareColor("quadrado-test", "rgb(255,125,75)", "1px solid rgb(0,0,0)");
-
+        // console.log(`Gradiente ${gradientColors}`);
         squareStyle.addStyle();
         squareTransparency.addStyle();
         squareTest.addStyle();
@@ -313,9 +315,10 @@ function generateCalendarAllTasks(year, squareSize, borderSize, numberTasks, col
             } else {
                 pos = week*7 + (dayWeek - start + 1);
                 if (shouldBeActive.hasOwnProperty(pos)){
-                    squareInstance.generateSquareAllTasks(calendarContainer, ["quadrado-estilo", gradientColors[0]]); // 
+                    // console.log(`Gradiente ${gradientColors[0]}`);
+                    squareInstance.generateSquareAllTasks(calendarContainer, ["quadrado-estilo", gradientColors[shouldBeActive[pos]].className]);
                 } else {
-                    squareInstance.generateSquareAllTasks(calendarContainer, ["quadrado-estilo", "quadrado-test"]);    // gradientColors[1]
+                    squareInstance.generateSquareAllTasks(calendarContainer, ["quadrado-estilo", gradientColors[0].className]);
                 }
             }
         }

@@ -89,7 +89,7 @@ navegarRotina.addEventListener('click', async (event) => {
     
     let rotinasAtualizadas = rotinas.map((rotina, index) => {
         let estaMarcada = checkboxes[index].checked;
-        return new Rotina(rotina.nome, rotina.description, rotina.frequency, estaMarcada);
+        return new Rotina(rotina.nome, rotina.description, rotina.frequency, rotina.color ,estaMarcada);
     });
 
     await atualizarRotinasChecadas(rotinasAtualizadas, dataHoje);

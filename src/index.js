@@ -44,8 +44,8 @@ function createWindow() {
     });
 
     mainWindow.loadURL('file://' + 'D:\\2025\\Projetos\\MetasDoAno\\src' + '/index.html');
-
     mainWindow.webContents.openDevTools();
+    // mainWindow.loadFile('src/index.html');   
 
     mainWindow.removeMenu();
     mainWindow.on('closed', () => {
