@@ -69,3 +69,16 @@ function reduzirRGB(rgb, percentual) {
 
     return `rgb(${r}, ${g}, ${b})`;
 }
+
+function addColors(colorOne, colorTwo) {
+    let [rOne, gOne, bOne] = colorOne.match(/\d+/g).map(Number);
+    let [rTwo, gTwo, bTwo] = colorTwo.match(/\d+/g).map(Number);
+    return `rgb(${rOne + rTwo}, ${gOne + gTwo}, ${bOne + bTwo})`
+}
+
+function mixedRGBColors(colorOne, colorTwo, percentual) {
+    let rest = 100 - percentual;
+    const colorOnePart = reduzirRGB(colorOne,percentual)
+    const colorTwoPart = reduzirRGB(colorTwo,rest)
+    return addColors(colorOnePart,colorTwoPart)
+}

@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     const rotinaNome = getParametro("nome");
     const color = getParametro("color");
 
+    let principal = document.getElementById("principal");
+    const grey = 255;
+    principal.style.backgroundColor = mixedRGBColors(color, `rgb(${grey}, ${grey}, ${grey})`, 25);
+
     console.log("Nome da rotina:", rotinaNome);
 
     document.getElementById("rotinaNome").innerText = rotinaNome || "Nome não encontrado";

@@ -11,9 +11,10 @@ class Rotina {
     showRotinaCompleta(rotinas,listaRotinas) {
         let div = document.createElement("div");
         div.classList.add("rotina");
+        const grey = 255;
+        div.style.backgroundColor = mixedRGBColors(this.color, `rgb(${grey}, ${grey}, ${grey})`, 65);
+        console.log(`BackgroundColor => ${div.style.backgroundColor}`);
 
-        div.style.backgroundColor = reduzirRGB(this.color, 85);
-        
         div.innerHTML = `
             <div class="rotina-content">
                 <h3>${this.nome}</h3>
@@ -40,8 +41,8 @@ class Rotina {
     showTarefaInfo() {
         let div = document.createElement("div");
         div.classList.add("rotina");
-
-        div.style.backgroundColor = reduzirRGB(this.color, 95);
+        const grey = 255;
+        div.style.backgroundColor = mixedRGBColors(this.color, `rgb(${grey}, ${grey}, ${grey})`, 65);
 
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
