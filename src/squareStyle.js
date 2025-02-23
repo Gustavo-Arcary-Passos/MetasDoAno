@@ -253,7 +253,7 @@ function generateCalendarMonth(squareSize, borderSize, colorDefault, colorActive
     });
 }
 
-function generateCalendarAllTasks(year, squareSize, borderSize, numberTasks, colorActive, shouldBeActive) {
+function generateCalendarAllTasks(year, squareSize, borderSize, numberTasks, colorDefault, colorActive, shouldBeActive) {
     Promise.all([
         window.api.countWeeksInYear(year),
         window.api.countDaysInYear(year),
@@ -270,15 +270,15 @@ function generateCalendarAllTasks(year, squareSize, borderSize, numberTasks, col
     
         for (let i = 0; i <= numberTasks; i++) {
             console.log(`factor = ${i}/${numberTasks}*50 + 50`);
-            const factor = (i / (numberTasks)) * 75 + 25;
-            const interpolatedColor = reduzirRGB(colorActive, factor);
+            const factor = (i / (numberTasks)) * 100;
+            const interpolatedColor = mixedRGBColors(colorActive,colorDefault, factor);
             console.log(`i = ${i} factor = ${factor} interpolatedColor = ${interpolatedColor}`);
             gradientColors.push(new SquareColor(`quadrado-active-${i}`, interpolatedColor, "1px solid rgb(0,0,0)"));
             gradientColors[i].addStyle();
         }
         const squareTransparency = new SquareColor("quadrado-transparency", "rgba(0,0,0,0)", "1px solid rgba(0,0,0,0)");
         const squareTest = new SquareColor("quadrado-test", "rgb(255,125,75)", "1px solid rgb(0,0,0)");
-        // console.log(`Gradiente ${gradientColors}`);
+        
         squareStyle.addStyle();
         squareTransparency.addStyle();
         squareTest.addStyle();
@@ -305,23 +305,53 @@ function generateCalendarAllTasks(year, squareSize, borderSize, numberTasks, col
             let dayWeek = Math.floor(i / weeks);
             let week = i % weeks;
             if (week == 0 && dayWeek < start) {
-                // squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareTest.className, squareTest.className, window.api.dayFromNumber);
                 squareInstance.generateSquareAllTasks(calendarContainer, ["quadrado-estilo", "quadrado-transparency"]);
                 blank += 1;
             } else if (week == (weeks - 1) && dayWeek > end) {
-                // squareInstance.generateSquare(calendarContainer, ["quadrado-estilo", "quadrado-transparency"], squareTest.className, squareTest.className, window.api.dayFromNumber);
                 squareInstance.generateSquareAllTasks(calendarContainer, ["quadrado-estilo", "quadrado-transparency"]);
                 blank += 1;
             } else {
                 pos = week*7 + (dayWeek - start + 1);
                 if (shouldBeActive.hasOwnProperty(pos)){
-                    // console.log(`Gradiente ${gradientColors[0]}`);
+                    // console.log(`Gradiente ${shouldBeActive[pos]}`);
                     squareInstance.generateSquareAllTasks(calendarContainer, ["quadrado-estilo", gradientColors[shouldBeActive[pos]].className]);
                 } else {
                     squareInstance.generateSquareAllTasks(calendarContainer, ["quadrado-estilo", gradientColors[0].className]);
                 }
             }
         }
+
+        const calendarLegend = document.createElement("div");
+        calendarLegend.className = "calendar-legend";
+        container.appendChild(calendarLegend);
+
+        let calendarLegendStyle = document.getElementById("dynamic-styles");
+        calendarLegendStyle.innerHTML += `
+            .calendar-legend {
+                display: grid;
+                grid-template-columns: repeat(${gradientColors.length}, auto);
+                gap: 2px;
+                justify-content: start;
+                margin: 20px;
+            }
+            .legend-text {
+                text-align: center;
+                font-size: 14px;
+                font-weight: bold;
+            }
+        `;
+
+        for (let i = 0; i < gradientColors.length; i++) {
+            squareInstance.generateSquareAllTasks(calendarLegend, ["quadrado-estilo", gradientColors[i].className]);
+        }
+        for (let i = 0; i < gradientColors.length; i++) {
+            let textWrapper = document.createElement("div");
+            textWrapper.className = "legend-text";
+            textWrapper.innerText = i;
+
+            calendarLegend.appendChild(textWrapper);
+        }
+
     }).catch(error => {
         console.error("Erro ao gerar o calendário:", error);
     });

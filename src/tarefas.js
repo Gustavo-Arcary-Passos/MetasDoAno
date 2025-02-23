@@ -20,7 +20,7 @@ async function carregarRotinas() {
     let tasksDoneAllDates = await window.api.countAllRotinasAllDays();
     let calendarFormated = await window.api.groupDatesBy(tasksDoneAllDates, 'overview');
     
-    generateCalendarAllTasks(2025, 24, 5, rotinas.length, `rgb(0, 255, 0)`, calendarFormated);
+    generateCalendarAllTasks(2025, 24, 5, rotinas.length, `rgb(255, 0, 0)`,`rgb(0, 255, 0)`, calendarFormated);
 }
 
 async function atualizarRotinasChecadas(rotinas, dataHoje) {

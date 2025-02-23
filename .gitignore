@@ -22,3 +22,5 @@ metro.config.js
 # Ignorar arquivos de sistemas operacionais
 .DS_Store    # Para macOS
 Thumbs.db    # Para Windows
+
+db/
