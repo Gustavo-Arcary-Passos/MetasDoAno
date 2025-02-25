@@ -1,11 +1,71 @@
 
 class Rotina {
-    constructor(nome, description, frequency, color, checked = false) {
+    constructor(nome, description, frequency, color, checked = false, dataHoje = "") {
         this.nome = nome;
         this.description = description;
         this.frequency = frequency;
         this.color = color;
         this.checked = checked;
+        this.currChecked = null;
+        this.allChecked = null;
+
+        // if (dataHoje) {
+        //     this.init(dataHoje);
+        // }
+    }
+
+    // async init(dataHoje) {
+    //     this.currChecked = await this.getCurrChecked(dataHoje);
+    //     this.allChecked = await this.getAllChecked();
+    // }
+
+    async getCurrChecked(dataHoje) {
+        if (this.frequency === "Diária") {
+            return await window.api.today(dataHoje);
+        } else if (this.frequency === "Semanal") {
+            const dataDomingo = await window.api.getSundayOfWeek(dataHoje);
+            return await window.api.currentWeek(dataDomingo);
+        } else if (this.frequency === "Mensal") {
+            const dataFirstDayMonth = await window.api.getFirstDayOfMonth(dataHoje);
+            return await window.api.currentMonth(dataFirstDayMonth);
+        }
+    }
+
+    async getAllChecked() {
+        const data = await window.api.getRotinaDatas(this.nome);
+        if (this.frequency === "Diária") {
+            return await window.api.groupDatesBy(data, 'day');
+        } else if (this.frequency === "Semanal") {
+            return await window.api.groupDatesBy(data, 'week');
+        } else if (this.frequency === "Mensal") {
+            return await window.api.groupDatesBy(data, 'month');
+        }
+    }
+
+    async calculateStreak() {
+
+        const dataHoje = await window.api.day();
+        this.currChecked = await this.getCurrChecked(dataHoje);
+        this.allChecked = await this.getAllChecked();
+
+        // if (!this.currChecked || !this.allChecked) {
+        //     console.warn("Esperando os dados carregarem...");
+        //     return 0;
+        // }
+
+        if (this.checked) {
+            let currStreak = 0;
+            console.log(`${this.currChecked}`);
+            for (let i = this.currChecked; i >= 1; i--) {
+                console.log(`${i}`);
+                if (!this.allChecked.hasOwnProperty(i)) {
+                    break;
+                }
+                currStreak += 1;
+            }
+            return currStreak;
+        }
+        return 0;
     }
     
     showRotinaCompleta(rotinas,listaRotinas) {
@@ -64,43 +124,46 @@ class Rotina {
         return div;
     }
 
-    showTarefaInfo() {
+    async showTarefaInfo() {
         const white = 255;
         const black = 0;
-
+    
         let div = document.createElement("div");
         div.classList.add("rotina");
         div.style.backgroundColor = mixedRGBColors(this.color, `rgb(${white}, ${white}, ${white})`, 65);
-
+    
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.classList.add("tarefa-checkbox");
         checkbox.checked = this.checked;
-
+    
         let label = document.createElement("label");
         label.textContent = this.nome;
         label.style.marginLeft = "10px";
-
+    
         let fireEmojiDiv = document.createElement("div");
-        fireEmojiDiv.classList.add("streak")
+        fireEmojiDiv.classList.add("streak");
         fireEmojiDiv.style.backgroundColor = mixedRGBColors(this.color, `rgb(${white}, ${white}, ${white})`, 25);
-
+    
         let fireEmoji = document.createElement("span");
-        fireEmoji.style.color = mixedRGBColors(this.color, `rgb(${black}, ${black}, ${black})`, 35)
-        fireEmoji.innerHTML = "10 🔥";
+        fireEmoji.style.color = mixedRGBColors(this.color, `rgb(${black}, ${black}, ${black})`, 35);
+    
+        const currStreak = await this.calculateStreak(); 
+    
+        fireEmoji.innerHTML = `${currStreak} 🔥`;
         fireEmoji.style.marginLeft = "10px";
-
+    
         fireEmojiDiv.appendChild(fireEmoji);
-
+    
         div.style.display = "flex";
         div.style.alignItems = "center";
-
+    
         label.style.flexGrow = "1";
-        
+    
         div.appendChild(checkbox);
         div.appendChild(label);
         div.appendChild(fireEmojiDiv);
-
+    
         return div;
     }
 }

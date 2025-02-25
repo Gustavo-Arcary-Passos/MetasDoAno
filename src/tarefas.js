@@ -9,11 +9,11 @@ async function carregarRotinas() {
     let rotinasChecked = await window.api.getRotinaHoje(dataHoje);
     let nomesRotinasChecked = new Set(rotinasChecked.map(r => r.nome));
 
-    rotinas.forEach(rotina => {
+    rotinas.forEach(async (rotina) => {
         let estaMarcada = nomesRotinasChecked.has(rotina.nome);
         
-        let rotinaObj = new Rotina(rotina.nome, rotina.description, rotina.frequency, rotina.color, estaMarcada);
-        listaRotinas.appendChild(rotinaObj.showTarefaInfo());
+        let rotinaObj = new Rotina(rotina.nome, rotina.description, rotina.frequency, rotina.color, estaMarcada, dataHoje);
+        listaRotinas.appendChild(await rotinaObj.showTarefaInfo());
     });
 
 
