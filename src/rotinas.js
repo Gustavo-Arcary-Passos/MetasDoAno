@@ -28,4 +28,14 @@ async function carregarRotinas() {
     listaRotinas.appendChild(addRotina());
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    let navegarRotina = document.getElementById("navegarRotina");
+    
+    if (navegarRotina) {
+        navegarRotina.addEventListener('click', async () => {
+            window.location.href = "index.html";
+        });
+    }
+});
+
 carregarRotinas();

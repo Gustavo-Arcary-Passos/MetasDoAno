@@ -19,8 +19,10 @@ async function carregarRotinas() {
 
     let tasksDoneAllDates = await window.api.countAllRotinasAllDays();
     let calendarFormated = await window.api.groupDatesBy(tasksDoneAllDates, 'overview');
+
+    const today = await window.api.today(dataHoje);
     
-    generateCalendarAllTasks(2025, 24, 5, rotinas.length, `rgb(255, 0, 0)`,`rgb(0, 255, 0)`, calendarFormated);
+    generateCalendarAllTasks(2025, 24, 5, rotinas.length, `rgb(255, 0, 0)`,`rgb(0, 255, 0)`, calendarFormated,today);
 }
 
 async function atualizarRotinasChecadas(rotinas, dataHoje) {
@@ -77,24 +79,27 @@ async function atualizarRotinasChecadas(rotinas, dataHoje) {
     }
 }
 
-let navegarRotina = document.getElementById("navegarRotina");
-
-navegarRotina.addEventListener('click', async (event) => {
-    event.preventDefault();
-
-    let rotinas = await window.api.getRotinas(); 
-    let dataHoje = await window.api.day();  
-
-    let checkboxes = document.querySelectorAll(".tarefa-checkbox");
+document.addEventListener("DOMContentLoaded", () => {
+    let navegarRotina = document.getElementById("navegarRotina");
     
-    let rotinasAtualizadas = rotinas.map((rotina, index) => {
-        let estaMarcada = checkboxes[index].checked;
-        return new Rotina(rotina.nome, rotina.description, rotina.frequency, rotina.color ,estaMarcada);
-    });
+    if (navegarRotina) {
+        navegarRotina.addEventListener('click', async () => {
+            let rotinas = await window.api.getRotinas(); 
+            let dataHoje = await window.api.day();  
+        
+            let checkboxes = document.querySelectorAll(".tarefa-checkbox");
+            
+            let rotinasAtualizadas = rotinas.map((rotina, index) => {
+                let estaMarcada = checkboxes[index].checked;
+                return new Rotina(rotina.nome, rotina.description, rotina.frequency, rotina.color ,estaMarcada);
+            });
 
-    await atualizarRotinasChecadas(rotinasAtualizadas, dataHoje);
+            await atualizarRotinasChecadas(rotinasAtualizadas, dataHoje);
 
-    window.location.href = "rotina.html";
+            // Agora navega para a página
+            window.location.href = "rotina.html";
+        });
+    }
 });
 
 carregarRotinas();

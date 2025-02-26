@@ -253,7 +253,7 @@ function generateCalendarMonth(squareSize, borderSize, colorDefault, colorActive
     });
 }
 
-function generateCalendarAllTasks(year, squareSize, borderSize, numberTasks, colorDefault, colorActive, shouldBeActive) {
+function generateCalendarAllTasks(year, squareSize, borderSize, numberTasks, colorDefault, colorActive, shouldBeActive, today) {
     Promise.all([
         window.api.countWeeksInYear(year),
         window.api.countDaysInYear(year),
@@ -277,11 +277,11 @@ function generateCalendarAllTasks(year, squareSize, borderSize, numberTasks, col
             gradientColors[i].addStyle();
         }
         const squareTransparency = new SquareColor("quadrado-transparency", "rgba(0,0,0,0)", "1px solid rgba(0,0,0,0)");
-        const squareTest = new SquareColor("quadrado-test", "rgb(255,125,75)", "1px solid rgb(0,0,0)");
+        const squareDeactive = new SquareColor("quadrado-deactive", "rgb(75,75,75)", "1px solid rgb(0,0,0)");
         
         squareStyle.addStyle();
         squareTransparency.addStyle();
-        squareTest.addStyle();
+        squareDeactive.addStyle();
 
         const container = document.getElementById("calendar");
         const calendarContainer = document.createElement("div");
@@ -312,7 +312,10 @@ function generateCalendarAllTasks(year, squareSize, borderSize, numberTasks, col
                 blank += 1;
             } else {
                 pos = week*7 + (dayWeek - start + 1);
-                if (shouldBeActive.hasOwnProperty(pos)){
+                if (pos > today) {
+                    squareInstance.generateSquareAllTasks(calendarContainer, ["quadrado-estilo", "quadrado-deactive"]);
+                }   
+                else if (shouldBeActive.hasOwnProperty(pos)){
                     // console.log(`Gradiente ${shouldBeActive[pos]}`);
                     squareInstance.generateSquareAllTasks(calendarContainer, ["quadrado-estilo", gradientColors[shouldBeActive[pos]].className]);
                 } else {

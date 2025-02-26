@@ -8,6 +8,7 @@
         body {
             font-family: Arial, sans-serif;
         }
+
         .rotina {
             display: flex;
             align-items: center;
@@ -20,12 +21,36 @@
         .rotina-content {
             flex-grow: 1; 
         }
+
+        .nav-container {
+            display: flex;
+        }
+
+        .nav-button {
+            display: flex;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <h1>Minhas Rotinas</h1>
     <div id="listaRotinas"></div>
-    <a href="index.html">Voltar</a>
+    <div class="nav-container">
+        <button id="navegarRotina" class="nav-button">
+            ← Tarefas
+        </button>
+    </div>
 
     <script src="colorConverter.js"></script>
     <script src="rotina.js"></script>
