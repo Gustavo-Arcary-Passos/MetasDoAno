@@ -44,3 +44,13 @@ document.addEventListener("DOMContentLoaded", async function () {
         generateCalendarMonth(96, 20, reduzirRGB(color, 50), color, monthCheckedRotinas);
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    let navegarRotina = document.getElementById("navegarRotina");
+    
+    if (navegarRotina) {
+        navegarRotina.addEventListener('click', async () => {
+            window.location.href = "rotina.html";
+        });
+    }
+});

@@ -24,3 +24,5 @@ metro.config.js
 Thumbs.db    # Para Windows
 
 db/
+
+dist/
